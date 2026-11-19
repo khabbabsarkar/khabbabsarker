@@ -1,0 +1,2193 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>innominate | Khabbab Sarker — Security Portfolio</title>
+
+    <!-- Restore saved theme before first paint without triggering notifications -->
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('innominate.theme') === 'light') {
+                    document.documentElement.classList.remove('dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
+
+    <!-- SEO & Social Meta -->
+    <meta name="description" content="Khabbab Sarker (innominate) — Junior Penetration Tester & Web Application Security Enthusiast. Founder of CyberRookie CTF team. Web security, pentesting, OSINT & digital forensics.">
+    <meta name="author" content="Khabbab Sarker">
+    <meta name="theme-color" content="#050507">
+    <meta property="og:title" content="innominate | Khabbab Sarker — Security Portfolio">
+    <meta property="og:description" content="Security Researcher, OSINT, Digital Forensic, Jr. Penetration Tester, AI and AI ">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://khabbabsarker.bio.link/preview.png">
+    <meta property="og:url" content="https://khabbabsarker.bio.link">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@khabbabsarker">
+    <meta name="twitter:image" content="https://khabbabsarker.bio.link/preview.png">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23050507'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%232CFFFF' font-family='monospace'%3Ei%3C/text%3E%3C/svg%3E">
+
+    <!-- No-JS fallback: hide the JS-driven preloader (BUG-007) -->
+    <noscript>
+        <style>#preloader { display: none !important; }</style>
+    </noscript>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    screens: {
+                        xs: '480px',
+                    },
+                    colors: {
+                        cyber: {
+                            bg: '#050507',
+                            card: '#0c0d12',
+                            border: '#1e2230',
+                            accent: '#2CFFFF',
+                            accentGlow: 'rgba(44, 255, 255, 0.4)',
+                            cyan: '#06b6d4',
+                            text: '#f3f4f6',
+                            muted: '#9ca3af',
+                            terminal: '#0a0b10'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['"Fira Code"', '"JetBrains Mono"', 'Consolas', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://i.postimg.cc" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <style>
+        .sr-only {
+            position: absolute;
+            width: 1px; height: 1px;
+            padding: 0; margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        .skip-link {
+            position: absolute;
+            top: -100px; left: 1rem;
+            z-index: 100;
+            padding: .5rem 1rem;
+            background: #2CFFFF; color: #000;
+            font-weight: 700; border-radius: .375rem;
+            transition: top .2s ease;
+        }
+        .skip-link:focus { top: 1rem; }
+        html { scroll-padding-top: 5.5rem; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #050507; }
+        ::-webkit-scrollbar-thumb { background: #1e2230; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #2CFFFF; }
+        .bg-grid-pattern {
+            background-size: 30px 30px;
+            background-image:
+                linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+        }
+        .scanline-overlay {
+            background: linear-gradient(to bottom,
+                rgba(255,255,255,0) 0%, rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.3) 100%);
+            background-size: 100% 4px;
+        }
+        .hud-corner {
+            position: absolute; width: 12px; height: 12px;
+            border-color: #2CFFFF; pointer-events: none;
+        }
+        .hud-tl { top: -2px; left: -2px; border-top: 2px solid; border-left: 2px solid; }
+        .hud-tr { top: -2px; right: -2px; border-top: 2px solid; border-right: 2px solid; }
+        .hud-bl { bottom: -2px; left: -2px; border-bottom: 2px solid; border-left: 2px solid; }
+        .hud-br { bottom: -2px; right: -2px; border-bottom: 2px solid; border-right: 2px solid; }
+        .glow-cyan-wrapper { position: relative; }
+        .glow-cyan-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 0.5rem;
+            pointer-events: none;
+            box-shadow: 0 0 25px rgba(44, 255, 255, 0.5);
+            opacity: 0.4;
+            animation: pulseGlowOpacity 3s infinite ease-in-out;
+        }
+        @keyframes pulseGlowOpacity {
+            0%, 100% { opacity: 0.4; }
+            50%      { opacity: 1; }
+        }
+        @keyframes profileFloat {
+            0%, 100% { transform: translateY(0px); }
+            50%      { transform: translateY(-7px); }
+        }
+        .profile-float {
+            animation: profileFloat 6s ease-in-out infinite;
+            will-change: transform;
+        }
+        .profile-float:hover {
+            animation-play-state: paused;
+        }
+        .cli-cursor {
+            display: inline-block; width: 8px; height: 16px;
+            background-color: #2CFFFF; animation: blink 1s infinite;
+            vertical-align: middle; margin-left: 4px;
+        }
+        @keyframes blink { 0%,50%{opacity:1;} 51%,100%{opacity:0;} }
+        #terminal-history > div { overflow-wrap: anywhere; }
+        #echo-companion {
+            --bot-shell: #8b5cf6;
+            --bot-shell-dark: #5b21b6;
+            --bot-shell-light: #c4b5fd;
+            --bot-trim: #22d3ee;
+            --bot-visor: #090a10;
+            --bot-eye: #2CFFFF;
+            --bot-glow: rgba(44, 255, 255, 0.55);
+            --bot-emblem: #1e1b4b;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 54px;
+            height: 66px;
+            z-index: 45;
+            pointer-events: none;
+            will-change: transform;
+            user-select: none;
+            -webkit-user-select: none;
+            filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 8px var(--bot-glow));
+            transition: filter 0.35s ease;
+        }
+        #echo-companion-inner {
+            width: 100%;
+            height: 100%;
+            pointer-events: auto;
+            cursor: pointer;
+            transform-origin: center center;
+            animation: echoHover 3.2s ease-in-out infinite;
+        }
+        #echo-companion.is-excited #echo-companion-inner {
+            animation: echoExcited 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        #echo-companion.is-alert #echo-companion-inner {
+            animation: echoAlert 0.28s ease-out;
+        }
+        .echo-eye {
+            transform-origin: center;
+            transform-box: fill-box;
+            animation: echoBlink 4.8s infinite;
+        }
+        #echo-companion.is-excited .echo-eye {
+            transform: scaleY(1.15) scaleX(1.08);
+        }
+        .echo-thruster {
+            transform-origin: center top;
+            transform-box: fill-box;
+            animation: echoThrusterPulse 1.4s ease-in-out infinite alternate;
+        }
+        @keyframes echoHover {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+        @keyframes echoExcited {
+            0% { transform: scale(1) translateY(0); }
+            30% { transform: scale(1.16, 0.88) translateY(-10px) rotate(-6deg); }
+            65% { transform: scale(0.94, 1.1) translateY(-4px) rotate(6deg); }
+            100% { transform: scale(1) translateY(0) rotate(0deg); }
+        }
+        @keyframes echoAlert {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.14); }
+            100% { transform: scale(1); }
+        }
+        @keyframes echoBlink {
+            0%, 46%, 50%, 94%, 98%, 100% { transform: scaleY(1); }
+            48%, 96% { transform: scaleY(0.08); }
+        }
+        @keyframes echoThrusterPulse {
+            0% { opacity: 0.45; transform: scale(0.85); }
+            100% { opacity: 0.95; transform: scale(1.15); }
+        }
+        @media (max-width: 640px) {
+            #echo-companion {
+                width: 46px;
+                height: 56px;
+            }
+        }
+
+        /* ================= FLOATING MINI TERMINAL ================= */
+        #echo-mini-terminal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 46;
+            width: max-content;
+            max-width: min(300px, calc(100vw - 24px));
+            border-radius: 0.45rem;
+            background: rgba(10, 12, 20, 0.35);
+            backdrop-filter: blur(12px) saturate(140%);
+            -webkit-backdrop-filter: blur(12px) saturate(140%);
+            border: 1px solid rgba(44, 255, 255, 0.35);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 12px rgba(44, 255, 255, 0.16);
+            font-family: "Fira Code", "JetBrains Mono", Consolas, monospace;
+            font-size: 10.5px;
+            line-height: 1.45;
+            color: #e2e8f0;
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.22s ease, visibility 0.22s ease;
+            will-change: transform, opacity;
+            overflow: hidden;
+        }
+        #echo-mini-terminal.is-visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .echo-mini-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            padding: 4px 9px;
+            background: rgba(5, 6, 11, 0.65);
+            border-bottom: 1px solid rgba(44, 255, 255, 0.18);
+        }
+        .echo-mini-dots {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .echo-mini-dots span {
+            width: 6px;
+            height: 6px;
+            border-radius: 9999px;
+            display: inline-block;
+        }
+        .echo-mini-title {
+            font-size: 9px;
+            letter-spacing: 0.06em;
+            color: #2CFFFF;
+            font-weight: 600;
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .echo-mini-controls {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex: 0 0 auto;
+        }
+        #echo-mini-sound {
+            pointer-events: auto;
+            cursor: pointer;
+            background: rgba(250, 204, 21, 0.14);
+            border: 1px solid rgba(250, 204, 21, 0.58);
+            color: #FACC15;
+            font: 600 8px/1 "Fira Code", "JetBrains Mono", Consolas, monospace;
+            letter-spacing: 0.04em;
+            padding: 4px 5px;
+            border-radius: 3px;
+            white-space: nowrap;
+            transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        #echo-mini-sound[aria-pressed="true"] {
+            color: #111827;
+            border-color: #FACC15;
+            background: #FACC15;
+            box-shadow: 0 0 8px rgba(250, 204, 21, 0.22);
+        }
+        #echo-mini-sound:hover {
+            color: #FDE047;
+            border-color: #FDE047;
+            background: rgba(250, 204, 21, 0.22);
+        }
+        #echo-mini-sound[aria-pressed="true"]:hover {
+            color: #111827;
+            background: #FDE047;
+        }
+        #echo-mini-close {
+            pointer-events: auto;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            font-size: 13px;
+            line-height: 1;
+            padding: 0 2px;
+            border-radius: 3px;
+            transition: color 0.15s ease, background-color 0.15s ease;
+        }
+        #echo-mini-close:hover {
+            color: #2CFFFF;
+            background: rgba(44, 255, 255, 0.12);
+        }
+        .echo-mini-body {
+            padding: 8px 10px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: #f2a8ff;
+        }
+        .echo-mini-prompt {
+            color: #facc15;
+        }
+        .echo-mini-cursor {
+            display: inline-block;
+            width: 6px;
+            height: 11px;
+            background-color: #2CFFFF;
+            vertical-align: middle;
+            margin-left: 2px;
+            animation: blink 1s infinite;
+        }
+
+        /* ================= LIGHT MODE OVERRIDES ================= */
+        html:not(.dark) body {
+            background-color: #f4f7fb !important;
+            color: #0f172a !important;
+        }
+        html:not(.dark) ::-webkit-scrollbar-track { background: #e2e8f0; }
+        html:not(.dark) ::-webkit-scrollbar-thumb { background: #94a3b8; }
+        html:not(.dark) ::-webkit-scrollbar-thumb:hover { background: #0284c7; }
+        html:not(.dark) header {
+            background-color: rgba(248, 250, 252, 0.92) !important;
+            border-color: #cbd5e1 !important;
+        }
+        html:not(.dark) footer {
+            background-color: #e2e8f0 !important;
+            border-color: #cbd5e1 !important;
+            color: #475569 !important;
+        }
+        html:not(.dark) .bg-cyber-bg {
+            background-color: #f1f5f9 !important;
+        }
+        html:not(.dark) .bg-cyber-card {
+            background-color: #ffffff !important;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+        }
+        html:not(.dark) .border-cyber-border,
+        html:not(.dark) .border-gray-800,
+        html:not(.dark) .border-gray-900 {
+            border-color: #cbd5e1 !important;
+        }
+        html:not(.dark) .text-white {
+            color: #0f172a !important;
+        }
+        html:not(.dark) .text-gray-200,
+        html:not(.dark) .text-gray-300 {
+            color: #334155 !important;
+        }
+        html:not(.dark) .text-gray-400,
+        html:not(.dark) .text-gray-500 {
+            color: #475569 !important;
+        }
+        html:not(.dark) .text-cyber-accent {
+            color: #0369a1 !important;
+        }
+        /* Certificate titles: dark navy in light mode, cyan remains in dark mode */
+        html:not(.dark) #certifications h4 {
+            color: #0f172a !important;
+        }
+        html:not(.dark) .text-cyber-cyan {
+            color: #0284c7 !important;
+        }
+        html:not(.dark) .text-yellow-400 {
+            color: #b45309 !important;
+        }
+        html:not(.dark) .hover\:text-yellow-300:hover {
+            color: #92400e !important;
+        }
+        html:not(.dark) .text-emerald-400 {
+            color: #047857 !important;
+        }
+        html:not(.dark) .bg-cyber-accent {
+            background-color: #0284c7 !important;
+            color: #ffffff !important;
+        }
+        html:not(.dark) .hover\:bg-\[\#1fb8b8\]:hover {
+            background-color: #0369a1 !important;
+        }
+        html:not(.dark) .hover\:bg-cyber-border:hover {
+            background-color: #e2e8f0 !important;
+        }
+        html:not(.dark) .border-cyber-accent {
+            border-color: #0284c7 !important;
+        }
+        html:not(.dark) .hud-corner {
+            border-color: #0284c7 !important;
+        }
+        html:not(.dark) .cli-cursor {
+            background-color: #0284c7 !important;
+        }
+        html:not(.dark) #whoami [style*="#E0AFFF"] {
+            color: #7e22ce !important;
+        }
+        html:not(.dark) .scanline-overlay {
+            opacity: 0.04 !important;
+        }
+        html:not(.dark) #interactive-grid {
+            opacity: 0.45;
+            filter: invert(1);
+        }
+        /* Keep full-size terminal authentic dark for contrast while adapting wrapper */
+        html:not(.dark) #terminal-container {
+            background-color: #0f172a !important;
+            border-color: #94a3b8 !important;
+        }
+        html:not(.dark) #terminal-container .text-white,
+        html:not(.dark) #terminal-container .text-gray-300 {
+            color: #f8fafc !important;
+        }
+        html:not(.dark) #terminal-container .text-gray-400 {
+            color: #94a3b8 !important;
+        }
+        html:not(.dark) #terminal-container .text-yellow-400 {
+            color: #facc15 !important;
+        }
+        html:not(.dark) #terminal-container .text-cyber-accent {
+            color: #2CFFFF !important;
+        }
+        /* Light mode glass appearance for floating mini terminal */
+        html:not(.dark) #echo-mini-terminal {
+            background: rgba(255, 255, 255, 0.35);
+            border-color: rgba(2, 132, 199, 0.42);
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14), 0 0 10px rgba(2, 132, 199, 0.12);
+            color: #0f172a;
+        }
+        html:not(.dark) .echo-mini-header {
+            background: rgba(241, 245, 249, 0.85);
+            border-bottom-color: rgba(2, 132, 199, 0.2);
+        }
+        html:not(.dark) .echo-mini-title {
+            color: #0369a1;
+        }
+        html:not(.dark) .echo-mini-body {
+            color: #6b21a8;
+        }
+        html:not(.dark) .echo-mini-prompt {
+            color: #a16207;
+        }
+        html:not(.dark) #echo-mini-close {
+            color: #475569;
+        }
+        html:not(.dark) #echo-mini-close:hover {
+            color: #0369a1;
+            background: rgba(2, 132, 199, 0.12);
+        }
+        html:not(.dark) .echo-mini-cursor {
+            background-color: #0284c7;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .cli-cursor, .echo-mini-cursor, .animate-ping, .animate-pulse, .profile-float { animation: none !important; }
+            .cli-cursor, .echo-mini-cursor { opacity: 1; }
+            #echo-companion-inner, .echo-eye, .echo-thruster { animation: none !important; }
+            .glow-cyan-wrapper::after { animation: none !important; opacity: 0.6; }
+        }
+        @media print {
+            body { background: #fff !important; color: #000 !important; }
+            header, footer, #preloader, #toast,
+            .bg-grid-pattern, .scanline-overlay,
+            #terminal-container, #print-cv-btn,
+            #contact-form, #mobile-menu-btn,
+            #interactive-grid, #terminal-input,
+            #echo-companion, #echo-mini-terminal,
+            .no-print { display: none !important; }
+            main { max-width: 100% !important; padding: 0 !important; }
+            section { page-break-inside: avoid; padding: 1rem 0 !important; }
+            h1, h2, h3, h4 { color: #000 !important; }
+            .bg-cyber-card, .bg-cyber-bg, .bg-cyber-terminal {
+                background: #fff !important; border-color: #ccc !important;
+            }
+            a { color: #000 !important; text-decoration: underline; }
+            .text-cyber-accent, .text-yellow-400 { color: #000 !important; }
+            .text-gray-400, .text-gray-500, .text-gray-300 { color: #333 !important; }
+        }
+    </style>
+    <link rel="preload" href="https://cdn.jsdelivr.net/gh/L1337Xi/DevilCorp@main/dragon-studio-keyboard-typing-sound-effect-335503.mp3" as="audio" type="audio/mpeg" crossorigin="anonymous">
+</head>
+<body class="bg-cyber-bg text-cyber-text font-mono antialiased selection:bg-cyber-accent selection:text-black min-h-screen relative overflow-x-hidden">
+
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- PRELOADER -->
+    <div id="preloader" class="fixed inset-0 z-[60] bg-black flex flex-col items-center justify-center transition-opacity duration-700" aria-hidden="true">
+        <div class="text-center px-4">
+            <div class="text-4xl md:text-6xl font-bold text-white mb-4 uppercase tracking-[0.15em]">innominate</div>
+            <div class="w-64 md:w-80 h-1.5 bg-gray-900 rounded-full overflow-hidden mb-3 mx-auto relative border border-gray-800">
+                <div id="preloader-bar" class="h-full bg-cyber-accent w-0 transition-all duration-300 ease-out shadow-[0_0_10px_#2CFFFF]"></div>
+            </div>
+            <p class="text-xs font-mono text-gray-300 tracking-wider">
+                <span class="animate-pulse text-cyber-accent">►</span>
+                <span id="preloader-text">LOADING SECURITY MODULES...</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Background FX -->
+    <canvas id="interactive-grid" class="fixed inset-0 pointer-events-none z-0" aria-hidden="true"></canvas>
+    <div class="fixed inset-0 scanline-overlay pointer-events-none opacity-20 z-[1]" aria-hidden="true"></div>
+
+    <!-- ===================== HEADER ===================== -->
+    <header class="sticky top-0 z-40 bg-cyber-bg/95 backdrop-blur-md border-b border-cyber-border">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
+
+            <a href="#whoami" class="flex items-center gap-2 group min-w-0 shrink" aria-label="Home — innominate">
+                <span class="w-2.5 h-2.5 bg-cyber-accent rounded-full animate-pulse shrink-0" aria-hidden="true"></span>
+                <span class="font-bold text-[11px] sm:text-xs tracking-tight sm:tracking-wider text-yellow-400 group-hover:text-yellow-300 transition-colors font-mono leading-tight">
+                    <span class="block truncate max-w-[150px] xs:max-w-[190px] sm:max-w-none">┌──(khabbabsarker)-[~]</span>
+                    <span class="block truncate max-w-[150px] xs:max-w-[190px] sm:max-w-none">└─$ innominate</span>
+                </span>
+            </a>
+
+            <nav class="hidden md:flex items-center space-x-6 text-xs uppercase tracking-wider font-medium" aria-label="Primary">
+                <a href="#whoami" class="hover:text-cyber-accent transition-colors py-1 border-b-2 border-transparent hover:border-cyber-accent">WHOAMI</a>
+                <a href="#skills" class="hover:text-cyber-accent transition-colors py-1 border-b-2 border-transparent hover:border-cyber-accent">SKILLS</a>
+                <a href="#experience" class="hover:text-cyber-accent transition-colors py-1 border-b-2 border-transparent hover:border-cyber-accent">EXPERIENCE</a>
+                <a href="#certifications" class="hover:text-cyber-accent transition-colors py-1 border-b-2 border-transparent hover:border-cyber-accent">CERTIFICATIONS</a>
+                <a href="#contact" class="hover:text-cyber-accent transition-colors py-1 border-b-2 border-transparent hover:border-cyber-accent">PING ME</a>
+            </nav>
+
+            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                <button id="theme-toggle-btn" type="button"
+                        aria-label="Switch to Light Mode"
+                        title="Toggle Light / Dark Mode"
+                        class="flex items-center gap-1.5 text-xs text-gray-300 hover:text-cyber-accent bg-cyber-card px-2.5 py-1.5 rounded border border-cyber-border transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyber-accent">
+                    <i id="theme-toggle-icon" class="fa-solid fa-sun text-xs" aria-hidden="true"></i>
+                    <span id="theme-toggle-label" class="hidden sm:inline font-mono text-[11px]">LIGHT</span>
+                </button>
+                <div class="hidden sm:flex items-center gap-2 text-xs text-gray-300 bg-cyber-card px-3 py-1.5 rounded border border-cyber-border">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true"></span>
+                    <span>SYSTEM ONLINE</span>
+                </div>
+                <button id="mobile-menu-btn" type="button"
+                        aria-label="Toggle navigation menu"
+                        aria-expanded="false"
+                        aria-controls="mobile-menu"
+                        class="md:hidden text-gray-300 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyber-accent rounded p-2">
+                    <i class="fa-solid fa-bars text-xl" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+
+        <nav id="mobile-menu" class="hidden md:hidden bg-cyber-card border-b border-cyber-border px-4 pt-2 pb-4 space-y-2 text-xs" aria-label="Mobile">
+            <a href="#whoami" class="block py-2 text-gray-300 hover:text-cyber-accent border-b border-gray-800">WHOAMI</a>
+            <a href="#skills" class="block py-2 text-gray-300 hover:text-cyber-accent border-b border-gray-800">SKILLS</a>
+            <a href="#experience" class="block py-2 text-gray-300 hover:text-cyber-accent border-b border-gray-800">EXPERIENCE</a>
+            <a href="#certifications" class="block py-2 text-gray-300 hover:text-cyber-accent border-b border-gray-800">CERTIFICATIONS</a>
+            <a href="#contact" class="block py-2 text-gray-300 hover:text-cyber-accent">PING ME</a>
+        </nav>
+    </header>
+
+    <!-- MAIN -->
+    <main id="main" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+        <!-- HERO / WHOAMI -->
+        <section id="whoami" class="pt-4 pb-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <div class="lg:col-span-5 space-y-5">
+                    <div class="text-xs uppercase tracking-widest flex items-center gap-2">
+                        <span class="font-bold" style="color: #E0AFFF;">print("Hello Word, I am")</span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-none font-sans">
+                        Khabbab<br>
+                        <span class="text-cyber-accent">Sarker</span>
+                    </h1>
+
+                    <div class="bg-cyber-card p-3 rounded border border-cyber-border font-mono text-[11px] sm:text-sm flex flex-col justify-center min-h-[80px] shadow-inner overflow-hidden">
+                        <span class="text-yellow-400 font-bold truncate">┌──(khabbabsarker)-[~]</span>
+                        <div class="flex items-center min-w-0">
+                            <span class="text-yellow-400 font-bold mr-1.5 shrink-0">└─$</span>
+                            <span id="typewriter-text" class="text-white font-medium min-w-0 whitespace-normal break-words leading-relaxed" aria-hidden="true"></span>
+                            <span class="cli-cursor shrink-0" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                    <p class="sr-only">
+                        Roles: Security Researcher; OSINT & Digital Forensics;
+                        Jr. Penetration Tester; Web & AI Security;
+                        Bug Hunter.
+                    </p>
+
+                    <p class="text-xs sm:text-sm text-gray-300 leading-relaxed font-sans border-l-2 border-cyber-accent pl-3 py-1">
+                        I explore, build, and analyze web systems. I am interested in web security, penetration testing, OSINT, and digital forensics. I also have some experience with AI security. I enjoy finding security problems, learning how they work, and finding ways to make systems safer. I always try to learn new things and improve my knowledge of cybersecurity and technology.
+                    </p>
+
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <a href="#experience" class="px-5 py-2.5 bg-cyber-accent hover:bg-[#1fb8b8] text-black font-bold text-xs uppercase tracking-wider rounded transition-all shadow-[0_0_15px_rgba(44,255,255,0.4)] flex items-center gap-2 group focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyber-accent">
+                            <span>EXPLORE EXPERIENCE</span>
+                            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform" aria-hidden="true"></i>
+                        </a>
+                        <a href="#contact" class="px-5 py-2.5 bg-transparent hover:bg-cyber-border text-gray-200 border border-cyber-border hover:border-gray-500 font-semibold text-xs uppercase tracking-wider rounded transition-all flex items-center gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyber-accent">
+                            <i class="fa-solid fa-comments" aria-hidden="true"></i>
+                            <span>START A CONVERSATION</span>
+                        </a>
+                        <button id="print-cv-btn" type="button" data-action="print-cv" class="px-4 py-2.5 bg-cyber-card hover:bg-cyber-border text-gray-300 hover:text-white border border-cyber-border text-xs font-mono uppercase tracking-wider rounded transition-all flex items-center gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyber-accent">
+                            <i class="fa-solid fa-print" aria-hidden="true"></i>
+                            <span>PRINT CV</span>
+                        </button>
+                    </div>
+
+                    <div class="text-xs text-gray-400 pt-3 flex flex-wrap gap-y-1 gap-x-4">
+                        <span><i class="fa-solid fa-shield-halved text-cyber-accent mr-1" aria-hidden="true"></i> Independent Security Research</span>
+                        <span><i class="fa-solid fa-location-dot text-cyber-accent mr-1" aria-hidden="true"></i> Bogura, Rajshahi, Bangladesh</span>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-3 flex justify-center">
+                    <div class="relative w-full max-w-[280px] sm:max-w-[320px] bg-cyber-card p-3 border border-cyber-border rounded-lg shadow-2xl group profile-float">
+                        <div class="hud-corner hud-tl" aria-hidden="true"></div>
+                        <div class="hud-corner hud-tr" aria-hidden="true"></div>
+                        <div class="hud-corner hud-bl" aria-hidden="true"></div>
+                        <div class="hud-corner hud-br" aria-hidden="true"></div>
+
+                        <div class="flex justify-between items-center text-[10px] font-mono mb-2 px-1">
+                            <span class="font-bold" style="color: #FF0000;">[ CAM 0.1 — ROOT ACCESS ]</span>
+                            <span class="animate-pulse text-cyber-accent">● LIVE</span>
+                        </div>
+
+                        <div class="relative aspect-[4/5] bg-gray-950 overflow-hidden rounded border border-gray-800">
+                            <img id="profile-img"
+                                 src="https://i.postimg.cc/28tDj15k/Picsart-26-11-19-00-04-58-949.jpg"
+                                 alt="Khabbab Sarker — innominate"
+                                 class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                                 fetchpriority="high"
+                                 decoding="async">
+
+                            <svg id="profile-fallback-svg" class="hidden w-full h-full object-cover" viewBox="0 0 200 250" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Stylized cyber portrait of Khabbab Sarker">
+                                <rect width="200" height="250" fill="#090a0f"/>
+                                <path d="M0 50H200M0 100H200M0 150H200M0 200H200" stroke="#1f2937" stroke-dasharray="2 2"/>
+                                <path d="M50 0V250M100 0V250M150 0V250" stroke="#1f2937" stroke-dasharray="2 2"/>
+                                <path d="M100 60C116.569 60 130 73.4315 130 90C130 106.569 116.569 120 100 120C83.4315 120 70 106.569 70 90C70 73.4315 83.4315 60 100 60Z" fill="#1e293b" stroke="#2CFFFF" stroke-width="1.5"/>
+                                <path d="M35 220C35 170 65 140 100 140C135 140 165 170 165 220V250H35V220Z" fill="#111827" stroke="#374151" stroke-width="2"/>
+                                <line x1="75" y1="88" x2="125" y2="88" stroke="#2CFFFF" stroke-width="4" stroke-linecap="round"/>
+                                <circle cx="100" cy="88" r="3" fill="#ffffff" class="animate-ping"/>
+                            </svg>
+
+                            <div class="absolute inset-0 bg-grid-pattern opacity-35 pointer-events-none" aria-hidden="true"></div>
+                            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-cyber-accent/15 to-black/50 opacity-40 animate-pulse pointer-events-none" aria-hidden="true"></div>
+                            <div class="absolute bottom-2 left-2 bg-black/80 backdrop-blur px-2 py-1 border border-cyber-accent/40 rounded text-[10px] font-mono tracking-widest text-white">
+                                <span class="text-cyber-accent">innominate</span> #01
+                            </div>
+                        </div>
+
+                        <div class="mt-2 text-[10px] font-mono text-gray-300 flex justify-between items-center px-1">
+                            <span>ID: 16KSxFHN19</span>
+                            <span class="text-emerald-400">SECURE: YES</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-4 glow-cyan-wrapper">
+                    <div id="terminal-container" class="bg-[#07080d] border border-cyber-border rounded-lg overflow-hidden shadow-2xl flex flex-col h-[380px] sm:h-[420px]">
+                        <div class="bg-gray-950 px-3 py-2 border-b border-cyber-border flex items-center justify-between select-none">
+                            <div class="flex items-center gap-2">
+                                <button type="button" data-action="clear-terminal" aria-label="Clear terminal output" title="Clear Output"
+                                        class="w-3 h-3 rounded-full bg-red-500 inline-block hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"></button>
+                                <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block" aria-hidden="true"></span>
+                                <span class="w-3 h-3 rounded-full bg-green-500 inline-block" aria-hidden="true"></span>
+                                <span class="text-xs font-bold text-gray-300 ml-2 font-mono">innominate TERMINAL V1.0</span>
+                            </div>
+                            <span class="text-[10px] text-gray-400 font-mono">BASH</span>
+                        </div>
+
+                        <div id="terminal-body" class="p-3 text-xs font-mono overflow-y-auto flex-1 space-y-2 text-[#f2a8ff]">
+                            <div id="terminal-intro" class="space-y-2">
+                                <div class="text-gray-400">innominate OS [Version 1.16.19]</div>
+                                <div class="text-gray-400">Type <span class="text-cyber-accent font-bold">'help'</span> for a list of available commands.</div>
+                                <div class="my-2 border-b border-gray-900"></div>
+                                <div>
+                                    <div class="text-yellow-400 font-bold">┌──(khabbabsarker㉿Portfolio)-[~]</div>
+                                    <div><span class="text-yellow-400 font-bold">└─$ innominate:~#</span> whoami</div>
+                                    <div class="ml-2 mt-1">Khabbab Sarker - #innominate<br>Security Researcher ¦ Jr. Penetration Tester ¦ Digital Forensic ¦ AI Security</div>
+                                </div>
+                            </div>
+                            <div id="terminal-history"></div>
+                        </div>
+
+                        <div class="bg-black/60 px-3 py-2 border-t border-cyber-border flex flex-col gap-0.5">
+                            <span class="text-yellow-400 font-bold text-[11px] leading-tight">┌──(khabbabsarker㉿Portfolio)-[~]</span>
+                            <div class="flex items-center gap-2">
+                                <label for="terminal-input" class="text-yellow-400 font-bold text-xs whitespace-nowrap">└─$ innominate:~#</label>
+                                <input type="text" id="terminal-input" autocomplete="off" spellcheck="false"
+                                       placeholder="Type a command..."
+                                       aria-label="Terminal command input"
+                                       class="w-full bg-transparent border-none outline-none text-xs text-white font-mono placeholder-gray-500 focus-visible:outline focus-visible:outline-1 focus-visible:outline-cyber-accent rounded px-1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILLS -->
+        <section id="skills" class="pt-8">
+            <div class="flex items-center gap-3 mb-8">
+                <span class="text-cyber-accent font-mono text-xl font-bold" aria-hidden="true">01.</span>
+                <h2 class="text-2xl font-extrabold text-white uppercase tracking-wider font-sans">TECHNICAL SKILLS</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-cyber-card border border-cyber-border p-6 rounded-lg hover:border-cyber-accent/50 transition-all relative group flex flex-col">
+                    <div class="w-10 h-10 rounded bg-cyber-bg border border-cyber-border flex items-center justify-center text-cyber-accent mb-4 group-hover:scale-110 transition-transform shrink-0">
+                        <i class="fa-solid fa-shield-halved text-xl" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white mb-2">Website Security</h3>
+                    <p class="text-xs text-gray-300 leading-relaxed font-sans mb-4 flex-grow">
+                        Assessing web applications for security vulnerabilities by following OWASP Top 10 guidelines and industry-standard testing methodologies. Identifying and analyzing common vulnerabilities, including XSS, SQL Injection (SQLi), CSRF, IDOR and Authentication Bypass.
+                    </p>
+                    <div class="text-[11px] text-gray-400 font-sans mb-3 border-t border-cyber-border pt-3">
+                        <span class="text-cyber-accent font-semibold block mb-1">Key Focus Areas:</span>
+                        <ul class="list-disc list-inside space-y-0.5 text-gray-300">
+                            <li>OWASP Top 10 Vulnerability Assessment</li>
+                            <li>Web Application Penetration Testing</li>
+                            <li>Burp Suite & HTTP Traffic Analysis</li>
+                            <li>API Security Auditing</li>
+                        </ul>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 mt-auto">
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Burp Suite</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">OWASP ZAP</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Nmap</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Nuclei</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">SQLmap</span>
+                    </div>
+                </div>
+
+                <div class="bg-cyber-card border border-cyber-border p-6 rounded-lg hover:border-cyber-accent/50 transition-all relative group flex flex-col">
+                    <div class="w-10 h-10 rounded bg-cyber-bg border border-cyber-border flex items-center justify-center text-cyber-accent mb-4 group-hover:scale-110 transition-transform shrink-0">
+                        <i class="fa-solid fa-user-secret text-xl" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white mb-2">OSINT</h3>
+                    <p class="text-xs text-gray-300 leading-relaxed font-sans mb-4 flex-grow">
+                        Gathering, analyzing, and correlating publicly available information to identify digital footprints, assess exposure, and support intelligence investigations. Conducting reconnaissance using publicly accessible sources, including social media, websites, domain records, IP addresses, metadata and online databases.
+                    </p>
+                    <div class="text-[11px] text-gray-400 font-sans mb-3 border-t border-cyber-border pt-3">
+                        <span class="text-cyber-accent font-semibold block mb-1">Key Focus Areas:</span>
+                        <ul class="list-disc list-inside space-y-0.5 text-gray-300">
+                            <li>Digital Footprint & Social Media</li>
+                            <li>WHOIS & DNS Reconnaissance</li>
+                            <li>Geolocation & Image Intelligence</li>
+                            <li>Public Data Exposure Assessment</li>
+                        </ul>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 mt-auto">
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Google Dorks</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Maltego</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Shodan</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Sherlock</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">SpiderFoot</span>
+                    </div>
+                </div>
+
+                <div class="bg-cyber-card border border-cyber-border p-6 rounded-lg hover:border-cyber-accent/50 transition-all relative group flex flex-col">
+                    <div class="w-10 h-10 rounded bg-cyber-bg border border-cyber-border flex items-center justify-center text-cyber-accent mb-4 group-hover:scale-110 transition-transform shrink-0">
+                        <i class="fa-solid fa-magnifying-glass text-xl" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white mb-2">Digital Forensic</h3>
+                    <p class="text-xs text-gray-300 leading-relaxed font-sans mb-4 flex-grow">
+                        Identifying, preserving, examining, and analyzing digital evidence to investigate security incidents, cybercrimes and suspicious digital activities while maintaining evidence integrity. Conducting forensic investigations across computers, storage devices, mobile devices and digital files using established forensic methodologies and evidence-handling procedures.
+                    </p>
+                    <div class="text-[11px] text-gray-400 font-sans mb-3 border-t border-cyber-border pt-3">
+                        <span class="text-cyber-accent font-semibold block mb-1">Key Focus Areas:</span>
+                        <ul class="list-disc list-inside space-y-0.5 text-gray-300">
+                            <li>Disk & File System Forensics</li>
+                            <li>File Recovery & Metadata Analysis</li>
+                            <li>Memory & Network Forensics</li>
+                            <li>Log Analysis & Timeline</li>
+                        </ul>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 mt-auto">
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Autopsy</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Wireshark</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">ExifTool</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">FTK Imager</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Magnet AXIOM</span>
+                    </div>
+                </div>
+
+                <div class="bg-cyber-card border border-cyber-border p-6 rounded-lg hover:border-cyber-accent/50 transition-all relative group flex flex-col">
+                    <div class="w-10 h-10 rounded bg-cyber-bg border border-cyber-border flex items-center justify-center text-cyber-accent mb-4 group-hover:scale-110 transition-transform shrink-0">
+                        <i class="fa-solid fa-diagram-project text-xl" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white mb-2">Project Management</h3>
+                    <p class="text-xs text-gray-300 leading-relaxed font-sans mb-4 flex-grow">
+                        Planning, organizing and managing projects from initiation to completion using industry-standard project management methodologies and best practices. Applying traditional project management (Waterfall) and Agile approaches to define project goals, manage project scope, coordinate teams, allocate resources, and deliver projects within established timelines and budgets.
+                    </p>
+                    <div class="text-[11px] text-gray-400 font-sans mb-3 border-t border-cyber-border pt-3">
+                        <span class="text-cyber-accent font-semibold block mb-1">Key Focus Areas:</span>
+                        <ul class="list-disc list-inside space-y-0.5 text-gray-300">
+                            <li>Project Documentation & Reporting</li>
+                            <li>Risk Assessment & Mitigation</li>
+                            <li>Project Execution & Quality Management</li>
+                            <li>Budget & Resource Management</li>
+                        </ul>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 mt-auto">
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Google Sheets</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Google Docs</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Microsoft Excel</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Microsoft Word</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Microsoft PowerPoint</span>
+                    </div>
+                </div>
+
+                <div class="bg-cyber-card border border-cyber-border p-6 rounded-lg hover:border-cyber-accent/50 transition-all relative group flex flex-col">
+                    <div class="w-10 h-10 rounded bg-cyber-bg border border-cyber-border flex items-center justify-center text-cyber-accent mb-4 group-hover:scale-110 transition-transform shrink-0">
+                        <i class="fa-solid fa-microchip text-xl" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white mb-2">Artificial Intelligence</h3>
+                    <p class="text-xs text-gray-300 leading-relaxed font-sans mb-4 flex-grow">
+                        Using Artificial Intelligence (AI) and Generative AI to improve productivity, simplify workflows, and solve real-world problems. Applying AI tools for research, content creation, data analysis, communication, and application development through effective prompting and responsible AI practices.
+                    </p>
+                    <div class="text-[11px] text-gray-400 font-sans mb-3 border-t border-cyber-border pt-3">
+                        <span class="text-cyber-accent font-semibold block mb-1">Key Focus Areas:</span>
+                        <ul class="list-disc list-inside space-y-0.5 text-gray-300">
+                            <li>Prompt Engineering & Prompt Patterns</li>
+                            <li>AI-Assisted Research & Information Analysis</li>
+                            <li>AI-Powered Brainstorming & Project Planning</li>
+                            <li>Vibe Coding & AI-Assisted App Development</li>
+                        </ul>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 mt-auto">
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Google AI Studio</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Google Gemini</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Gemini Canvas</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">NotebookLM</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Nano Banana</span>
+                    </div>
+                </div>
+
+                <div class="bg-cyber-card border border-cyber-border p-6 rounded-lg hover:border-cyber-accent/50 transition-all relative group flex flex-col">
+                    <div class="w-10 h-10 rounded bg-cyber-bg border border-cyber-border flex items-center justify-center text-cyber-accent mb-4 group-hover:scale-110 transition-transform shrink-0">
+                        <i class="fa-solid fa-code text-xl" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-white mb-2">Programming</h3>
+                    <p class="text-xs text-gray-300 leading-relaxed font-sans mb-4 flex-grow">
+                        Learning programming and software development, focusing on building foundational coding skills and understanding how applications and websites work. Exploring programming languages, web technologies, and AI-assisted coding while practicing problem-solving and building small projects to improve my skills.
+                    </p>
+                    <div class="text-[11px] text-gray-400 font-sans mb-3 border-t border-cyber-border pt-3">
+                        <span class="text-cyber-accent font-semibold block mb-1">Key Focus Areas:</span>
+                        <ul class="list-disc list-inside space-y-0.5 text-gray-300">
+                            <li>Programming Fundamentals</li>
+                            <li>HTML, CSS, JavaScript & Python</li>
+                            <li>Frontend Web Development</li>
+                            <li>AI-Assisted Coding</li>
+                        </ul>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 mt-auto">
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Google AI Studio</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Visual Studio Code</span>
+                        <span class="bg-cyber-bg border border-cyber-border text-cyber-accent px-2 py-0.5 rounded text-[10px] font-mono">Git & GitHub</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE -->
+        <section id="experience" class="pt-8">
+            <div class="flex items-center gap-3 mb-8">
+                <span class="text-cyber-accent font-mono text-xl font-bold" aria-hidden="true">02.</span>
+                <h2 class="text-2xl font-extrabold text-white uppercase tracking-wider font-sans">Experience</h2>
+            </div>
+
+            <div class="relative border-l border-cyber-border ml-3 sm:ml-6 space-y-8">
+                <div class="relative pl-6 sm:pl-8 group">
+                    <div class="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-cyber-accent group-hover:scale-125 transition-transform"></div>
+                    <div class="bg-cyber-card border border-cyber-border p-5 rounded-lg">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-1">
+                            <h3 class="text-sm font-bold text-white">Security Researcher <span class="text-cyber-accent">@ HackerOne / Bugcrowd</span></h3>
+                            <span class="text-[10px] font-mono text-gray-400">March 2026 – Present</span>
+                        </div>
+                        <ul class="text-xs text-gray-300 font-sans leading-relaxed list-disc list-inside space-y-1 mt-3">
+                            <li>Asset Reconciliation</li>
+                            <li>Vulnerability Assessment and Penetration Testing (VAPT)</li>
+                            <li>Bug Bounty</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="relative pl-6 sm:pl-8 group">
+                    <div class="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-gray-600 group-hover:bg-cyber-accent transition-colors"></div>
+                    <div class="bg-cyber-card border border-cyber-border p-5 rounded-lg">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-1">
+                            <h3 class="text-sm font-bold text-white">Chief Technology Officer <span class="text-cyber-accent">@ SAWDIKUL KITAAB</span></h3>
+                            <span class="text-[10px] font-mono text-gray-400">October 2022 – Present</span>
+                        </div>
+                        <div class="text-[11px] text-gray-400 font-mono mb-2">Bogra, Rajshahi, Bangladesh</div>
+                        <ul class="text-xs text-gray-300 font-sans leading-relaxed list-disc list-inside space-y-1">
+                            <li>Technology Leadership</li>
+                            <li>Social Media Management</li>
+                            <li>Consulting</li>
+                            <li>Technology Management</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CERTIFICATIONS -->
+        <section id="certifications" class="pt-8">
+            <div class="flex items-center gap-3 mb-8">
+                <span class="text-cyber-accent font-mono text-xl font-bold" aria-hidden="true">03.</span>
+                <h2 class="text-2xl font-extrabold text-white uppercase tracking-wider font-sans">Certifications</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-cyber-card border border-cyber-border p-4 rounded-lg flex items-start gap-4 hover:border-cyber-accent/30 transition-colors">
+                    <div class="text-cyber-accent text-xl pt-0.5 shrink-0"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-bold text-[#2CFFFF] break-words">Google Cybersecurity Professional Certificate</h4>
+                        <p class="text-[11px] text-white font-sans mt-1">Coursera</p>
+                        <a href="https://coursera.org/share/635e77953c0fe614b025cd764f908c97" target="_blank" rel="noopener noreferrer" class="inline-block text-[11px] font-bold text-yellow-400 hover:text-yellow-300 transition-colors mt-2 font-mono">VIEW CERT</a>
+                    </div>
+                </div>
+
+                <div class="bg-cyber-card border border-cyber-border p-4 rounded-lg flex items-start gap-4 hover:border-cyber-accent/30 transition-colors">
+                    <div class="text-cyber-accent text-xl pt-0.5 shrink-0"><i class="fa-solid fa-brain" aria-hidden="true"></i></div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-bold text-[#2CFFFF] break-words">Google AI Professional Certificate</h4>
+                        <p class="text-[11px] text-white font-sans mt-1">Coursera</p>
+                        <a href="https://coursera.org/share/e0022182aa9505500a3a05af9df2c4de" target="_blank" rel="noopener noreferrer" class="inline-block text-[11px] font-bold text-yellow-400 hover:text-yellow-300 transition-colors mt-2 font-mono">VIEW CERT</a>
+                    </div>
+                </div>
+
+                <div class="bg-cyber-card border border-cyber-border p-4 rounded-lg flex items-start gap-4 hover:border-cyber-accent/30 transition-colors">
+                    <div class="text-cyber-accent text-xl pt-0.5 shrink-0"><i class="fa-solid fa-clipboard-list" aria-hidden="true"></i></div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-bold text-[#2CFFFF] break-words">Google Project Management Professional Certificate</h4>
+                        <p class="text-[11px] text-white font-sans mt-1">Coursera</p>
+                        <span class="inline-block text-[11px] font-bold text-yellow-400/50 mt-2 font-mono cursor-default">Link coming soon</span>
+                    </div>
+                </div>
+
+                <div class="bg-cyber-card border border-cyber-border p-4 rounded-lg flex items-start gap-4 hover:border-cyber-accent/30 transition-colors">
+                    <div class="text-cyber-accent text-xl pt-0.5 shrink-0"><i class="fa-solid fa-microchip" aria-hidden="true"></i></div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-bold text-[#2CFFFF] break-words">AI Security Learning Path</h4>
+                        <p class="text-[11px] text-white font-sans mt-1">TryHackMe</p>
+                        <a href="https://tryhackme.com/certificate/THM-NG6C4ZWSUR" target="_blank" rel="noopener noreferrer" class="inline-block text-[11px] font-bold text-yellow-400 hover:text-yellow-300 transition-colors mt-2 font-mono">VIEW CERT</a>
+                    </div>
+                </div>
+
+                <div class="bg-cyber-card border border-cyber-border p-4 rounded-lg flex items-start gap-4 hover:border-cyber-accent/30 transition-colors">
+                    <div class="text-cyber-accent text-xl pt-0.5 shrink-0"><i class="fa-solid fa-terminal" aria-hidden="true"></i></div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-bold text-[#2CFFFF] break-words">Jr Penetration Tester Learning Path</h4>
+                        <p class="text-[11px] text-white font-sans mt-1">TryHackMe</p>
+                        <span class="inline-block text-[11px] font-bold text-yellow-400/50 mt-2 font-mono cursor-default">Link coming soon</span>
+                    </div>
+                </div>
+
+                <div class="bg-cyber-card border border-cyber-border p-4 rounded-lg flex items-start gap-4 hover:border-cyber-accent/30 transition-colors">
+                    <div class="text-cyber-accent text-xl pt-0.5 shrink-0"><i class="fa-solid fa-certificate" aria-hidden="true"></i></div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-bold text-[#2CFFFF] break-words">ISO/IEC 27001:2022 Lead Auditor</h4>
+                        <p class="text-[11px] text-white font-sans mt-1">Mastermind Assurance</p>
+                        <a href="https://learn.mastermindassurance.com/certificates/jccfysvvu8" target="_blank" rel="noopener noreferrer" class="inline-block text-[11px] font-bold text-yellow-400 hover:text-yellow-300 transition-colors mt-2 font-mono">VIEW CERT</a>
+                    </div>
+                </div>
+
+                <div class="bg-cyber-card border border-cyber-border p-4 rounded-lg flex items-start gap-4 hover:border-cyber-accent/30 transition-colors">
+                    <div class="text-cyber-accent text-xl pt-0.5 shrink-0"><i class="fa-solid fa-binoculars" aria-hidden="true"></i></div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-bold text-[#2CFFFF] break-words">Certified OSINT & Reconnaissance Investigator</h4>
+                        <p class="text-[11px] text-white font-sans mt-1">Hack & Fix Academy</p>
+                        <div class="text-[11px] text-gray-400 font-mono mt-2">CERT ID: 4880-9610-4317-6021</div>
+                    </div>
+                </div>
+
+                <div class="bg-cyber-card border border-cyber-border p-4 rounded-lg flex items-start gap-4 hover:border-cyber-accent/30 transition-colors">
+                    <div class="text-cyber-accent text-xl pt-0.5 shrink-0"><i class="fa-solid fa-fingerprint" aria-hidden="true"></i></div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-bold text-[#2CFFFF] break-words">Digital Forensics Essential</h4>
+                        <p class="text-[11px] text-white font-sans mt-1">EC-Council</p>
+                        <a href="https://learn.eccouncil.org/certificate/a6a5c28a-230d-416e-8805-051c151edcb6" target="_blank" rel="noopener noreferrer" class="inline-block text-[11px] font-bold text-yellow-400 hover:text-yellow-300 transition-colors mt-2 font-mono">VIEW CERT</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="pt-8 pb-16">
+            <div class="max-w-4xl mx-auto">
+                <div class="mb-10 text-center sm:text-left">
+                    <div class="flex items-center justify-center sm:justify-start gap-3 mb-2">
+                        <span class="text-cyber-accent font-mono text-xl font-bold" aria-hidden="true">04.</span>
+                        <h2 class="text-3xl font-extrabold text-white uppercase tracking-widest font-sans">Initiate<br class="sm:hidden"> Handshake</h2>
+                    </div>
+                    <p class="text-xs sm:text-sm text-gray-300 mt-4 leading-relaxed max-w-2xl mx-auto sm:mx-0 font-sans">
+                        For security consulting, digital forensics, or OSINT research inquiries, submit your request through the form below. Each submission will be reviewed, and a response will follow accordingly.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    <div class="bg-cyber-card border border-cyber-border hover:border-cyber-accent/50 p-5 rounded-lg flex items-center gap-4 transition-all group">
+                        <div class="w-10 h-10 rounded bg-cyber-bg border border-cyber-border flex items-center justify-center text-cyber-accent group-hover:scale-110 transition-transform shrink-0">
+                            <i class="fa-solid fa-envelope text-lg" aria-hidden="true"></i>
+                        </div>
+                        <div class="overflow-hidden flex-1 min-w-0">
+                            <div class="text-[10px] text-gray-400 font-mono tracking-widest uppercase mb-1">Email Address</div>
+                            <a href="mailto:khabbabsarker@gmail.com" class="text-sm text-gray-200 font-mono hover:text-white transition-colors break-all">khabbabsarker@gmail.com</a>
+                        </div>
+                        <button type="button" data-action="copy-email" data-copy="khabbabsarker@gmail.com" aria-label="Copy email address"
+                                class="text-gray-400 hover:text-cyber-accent transition-colors p-2 shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyber-accent rounded">
+                            <i class="fa-solid fa-copy" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+                    <div class="bg-cyber-card border border-cyber-border hover:border-cyber-accent/50 p-5 rounded-lg flex items-center gap-4 transition-all group">
+                        <div class="w-10 h-10 rounded bg-cyber-bg border border-cyber-border flex items-center justify-center text-cyber-accent group-hover:scale-110 transition-transform shrink-0">
+                            <i class="fa-brands fa-linkedin-in text-lg" aria-hidden="true"></i>
+                        </div>
+                        <div class="overflow-hidden flex-1 min-w-0">
+                            <div class="text-[10px] text-gray-400 font-mono tracking-widest uppercase mb-1">LinkedIn Profile</div>
+                            <a href="https://www.linkedin.com/in/khabbabsarker" target="_blank" rel="noopener noreferrer" class="text-sm text-gray-200 font-mono hover:text-white transition-colors break-all">linkedin.com/in/khabbabsarker</a>
+                        </div>
+                        <a href="https://www.linkedin.com/in/khabbabsarker" target="_blank" rel="noopener noreferrer" aria-label="Open LinkedIn profile"
+                           class="text-gray-400 hover:text-cyber-accent transition-colors p-2 shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyber-accent rounded">
+                            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                        </a>
+                    </div>
+
+                    <div class="bg-cyber-card border border-cyber-border hover:border-cyber-accent/50 p-5 rounded-lg flex items-center gap-4 transition-all group">
+                        <div class="w-10 h-10 rounded bg-cyber-bg border border-cyber-border flex items-center justify-center text-cyber-accent group-hover:scale-110 transition-transform shrink-0">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                        </div>
+                        <div class="overflow-hidden flex-1 min-w-0">
+                            <div class="text-[10px] text-gray-400 font-mono tracking-widest uppercase mb-1">X (Twitter) Profile</div>
+                            <a href="https://mobile.twitter.com/khabbabsarker" target="_blank" rel="noopener noreferrer" class="text-sm text-gray-200 font-mono hover:text-white transition-colors break-all">@khabbabsarker</a>
+                        </div>
+                        <a href="https://mobile.twitter.com/khabbabsarker" target="_blank" rel="noopener noreferrer" aria-label="Open X profile"
+                           class="text-gray-400 hover:text-cyber-accent transition-colors p-2 shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyber-accent rounded">
+                            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                        </a>
+                    </div>
+
+                    <div class="bg-cyber-card border border-cyber-border hover:border-cyber-accent/50 p-5 rounded-lg flex items-center gap-4 transition-all group">
+                        <div class="w-10 h-10 rounded bg-cyber-bg border border-cyber-border flex items-center justify-center text-cyber-accent group-hover:scale-110 transition-transform shrink-0">
+                            <i class="fa-solid fa-link text-lg" aria-hidden="true"></i>
+                        </div>
+                        <div class="overflow-hidden flex-1 min-w-0">
+                            <div class="text-[10px] text-gray-400 font-mono tracking-widest uppercase mb-1">Biolink</div>
+                            <a href="https://khabbabsarker.bio.link" target="_blank" rel="noopener noreferrer" class="text-sm text-gray-200 font-mono hover:text-white transition-colors break-all">khabbabsarker.bio.link</a>
+                        </div>
+                        <a href="https://khabbabsarker.bio.link" target="_blank" rel="noopener noreferrer" aria-label="Open biolink"
+                           class="text-gray-400 hover:text-cyber-accent transition-colors p-2 shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyber-accent rounded">
+                            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-cyber-card border border-cyber-border p-6 sm:p-8 rounded-lg relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyber-accent to-transparent opacity-50" aria-hidden="true"></div>
+
+                    <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" class="space-y-6" novalidate>
+                        <input type="hidden" name="access_key" value="7d6746f4-cfe7-41ef-8a98-6b68522b4fdb">
+                        <input type="hidden" name="subject" value="New portfolio contact from innominate site">
+                        <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off">
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label for="name" class="block text-xs text-gray-300 font-mono tracking-widest uppercase mb-2">Your Name</label>
+                                <input type="text" id="name" name="name" required autocomplete="name" placeholder="e.g. Agent innominate"
+                                       class="w-full bg-cyber-bg border border-cyber-border rounded px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyber-accent focus:ring-1 focus:ring-cyber-accent transition-all font-mono">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-xs text-gray-300 font-mono tracking-widest uppercase mb-2">Email</label>
+                                <input type="email" id="email" name="email" required autocomplete="email" placeholder="e.g. innominate@xyz.net"
+                                       class="w-full bg-cyber-bg border border-cyber-border rounded px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyber-accent focus:ring-1 focus:ring-cyber-accent transition-all font-mono">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="message" class="block text-xs text-gray-300 font-mono tracking-widest uppercase mb-2">Inject Encrypted Payload</label>
+                            <textarea id="message" name="message" required rows="5" placeholder="Input your encrypted payload here..."
+                                      class="w-full bg-cyber-bg border border-cyber-border rounded px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyber-accent focus:ring-1 focus:ring-cyber-accent transition-all font-mono resize-y"></textarea>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+                            <div id="form-status" class="hidden text-xs font-mono font-bold text-emerald-400" role="status" aria-live="polite"></div>
+                            <button type="submit" class="w-full sm:w-auto px-6 py-3 bg-cyber-accent hover:bg-[#1fb8b8] text-black font-bold text-xs uppercase tracking-wider rounded transition-all shadow-[0_0_15px_rgba(44,255,255,0.4)] flex items-center justify-center gap-2 group ml-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyber-accent disabled:opacity-60 disabled:cursor-not-allowed">
+                                <span>Inject Payload</span>
+                                <i class="fa-solid fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-cyber-border bg-black py-6 text-center text-xs text-gray-400 font-mono">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col items-center gap-1.5">
+            <div class="text-[10px] tracking-widest text-cyber-accent uppercase">[ CLASSIFIED IDENTITY ]</div>
+            <div class="text-gray-300">© 2026 Khabbab Sarker - #innominate ¦ All rights reserved.</div>
+            <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[10px] tracking-wider">
+                <span>CLEARANCE: <span class="text-cyber-accent">HIGH</span></span>
+                <span>CONNECTION: <span class="text-emerald-400">ENCRYPTED</span></span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Container -->
+    <div id="toast" role="status" aria-live="polite"
+         class="fixed bottom-5 right-5 z-50 bg-cyber-card border border-cyber-accent text-white px-4 py-3 rounded-lg shadow-2xl flex items-center gap-3 translate-y-20 opacity-0 pointer-events-none transition-all duration-300 font-mono text-xs max-w-[90vw]">
+        <i class="fa-solid fa-circle-info text-cyber-accent text-base shrink-0" aria-hidden="true"></i>
+        <span id="toast-message"></span>
+    </div>
+
+    <div id="terminal-announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- MINI TERMINAL FOR COMPANION -->
+    <div id="echo-mini-terminal" role="status" aria-live="polite" aria-hidden="true">
+        <div class="echo-mini-header">
+            <div class="flex items-center gap-1.5 min-w-0">
+                <div class="echo-mini-dots" aria-hidden="true">
+                    <span class="bg-red-500"></span>
+                    <span class="bg-yellow-500"></span>
+                    <span class="bg-green-500"></span>
+                </div>
+                <span class="echo-mini-title">INNOMINATE@ASSISTANT</span>
+            </div>
+            <div class="echo-mini-controls">
+                <button type="button" id="echo-mini-sound" aria-label="Enable typing sounds" aria-pressed="false" title="Typing sound: Off">SOUND OFF</button>
+                <button type="button" id="echo-mini-close" aria-label="Close companion terminal" title="Close">×</button>
+            </div>
+        </div>
+        <div class="echo-mini-body"><span id="echo-mini-prompt" class="echo-mini-prompt">┌──(khabbabsarker㉿Portfolio)-[~]
+└─$ innominate:~#</span><span id="echo-mini-text"></span><span class="echo-mini-cursor" aria-hidden="true"></span></div>
+    </div>
+
+    <!-- FLOATING ROBOT COMPANION -->
+    <div id="echo-companion" aria-hidden="true" title="Click me to switch theme color">
+        <div id="echo-companion-inner">
+            <svg viewBox="0 0 120 148" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full overflow-visible">
+                <defs>
+                    <linearGradient id="echo-hood-grad" x1="20" y1="10" x2="100" y2="95" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="var(--bot-shell-light)"/>
+                        <stop offset="45%" stop-color="var(--bot-shell)"/>
+                        <stop offset="100%" stop-color="var(--bot-shell-dark)"/>
+                    </linearGradient>
+                    <linearGradient id="echo-body-grad" x1="30" y1="88" x2="95" y2="136" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="var(--bot-shell)"/>
+                        <stop offset="100%" stop-color="var(--bot-shell-dark)"/>
+                    </linearGradient>
+                    <radialGradient id="echo-visor-grad" cx="50%" cy="42%" r="58%">
+                        <stop offset="0%" stop-color="#171c2b"/>
+                        <stop offset="75%" stop-color="var(--bot-visor)"/>
+                        <stop offset="100%" stop-color="#030407"/>
+                    </radialGradient>
+                </defs>
+                <ellipse class="echo-thruster" cx="60" cy="136" rx="22" ry="5.5" fill="var(--bot-eye)"/>
+                <path d="M38 91 C35 107, 29 122, 26 130 C39 135, 81 135, 94 130 C91 122, 85 107, 82 91 Z"
+                      fill="url(#echo-body-grad)" stroke="var(--bot-shell-dark)" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M35 113 L31 131" stroke="#050507" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+                <path d="M85 113 L89 131" stroke="#050507" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+                <path d="M54 108 C54 103, 66 103, 66 108 L68 114 C65 115.5, 55 115.5, 52 114 Z" fill="var(--bot-emblem)"/>
+                <circle cx="57.5" cy="109.5" r="1.3" fill="var(--bot-eye)"/>
+                <circle cx="62.5" cy="109.5" r="1.3" fill="var(--bot-eye)"/>
+                <path d="M37 89 Q60 96 83 89 L80 94 Q60 100 40 94 Z" fill="var(--bot-trim)"/>
+                <rect x="53" y="90" width="14" height="4.5" rx="2" fill="var(--bot-shell-light)"/>
+                <path d="M60 14 C69 14, 76 23, 86 24 C95 25, 102 18, 105 13 C106 23, 98 33, 88 34 C96 44, 99 58, 96 71 C93 84, 78 91, 60 91 C42 91, 27 84, 24 71 C21 58, 25 41, 37 29 C46 20, 52 14, 60 14 Z"
+                      fill="url(#echo-hood-grad)" stroke="var(--bot-shell-dark)" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M68 22 Q82 28 96 20 M75 26 Q86 30 99 24" stroke="var(--bot-eye)" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>
+                <circle cx="68" cy="22" r="1.6" fill="var(--bot-eye)"/>
+                <path d="M60 32 C74 32, 86 46, 86 63 C86 77, 74 84, 60 84 C46 84, 34 77, 34 63 C34 46, 46 32, 60 32 Z"
+                      fill="url(#echo-visor-grad)" stroke="var(--bot-trim)" stroke-width="1.8"/>
+                <g opacity="0.22" stroke="var(--bot-eye)" stroke-width="1">
+                    <path d="M42 72 H52 L55 76 H65 L68 72 H78"/>
+                    <rect x="46" y="45" width="28" height="24" rx="3" fill="none"/>
+                </g>
+                <g>
+                    <ellipse class="echo-eye" cx="49" cy="59" rx="5.5" ry="8.5" fill="var(--bot-eye)"/>
+                    <ellipse class="echo-eye" cx="71" cy="59" rx="5.5" ry="8.5" fill="var(--bot-eye)"/>
+                    <circle cx="47.2" cy="55.5" r="1.6" fill="#ffffff" opacity="0.9"/>
+                    <circle cx="69.2" cy="55.5" r="1.6" fill="#ffffff" opacity="0.9"/>
+                </g>
+                <path d="M43 41 C49 36, 56 35, 62 36" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.32"/>
+            </svg>
+        </div>
+    </div>
+
+    <script>
+        'use strict';
+        (function () {
+            const REDUCED_QUERY = window.matchMedia('(prefers-reduced-motion: reduce)');
+            const isReduced = () => REDUCED_QUERY.matches;
+            const escapeHtml = (str) => String(str).replace(/[&<>"'\`=]/g, s => (
+                { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;','`':'&#96;','=':'&#61;' }[s]
+            ));
+
+            (function initProfileImageFallback() {
+                const img = document.getElementById('profile-img');
+                const svg = document.getElementById('profile-fallback-svg');
+                if (!img || !svg) return;
+                const showFallback = () => {
+                    img.style.display = 'none';
+                    svg.classList.remove('hidden');
+                };
+                if (img.complete && img.naturalWidth === 0) { showFallback(); return; }
+                img.addEventListener('error', showFallback, { once: true });
+            })();
+
+            (function initPreloader() {
+                const preloader = document.getElementById('preloader');
+                if (!preloader) return;
+                let alreadySeen = false;
+                try { alreadySeen = sessionStorage.getItem('innominate.preloaded') === '1'; } catch {}
+                if (alreadySeen) { preloader.style.display = 'none'; return; }
+                let finished = false;
+                let barTimer = null;
+                let fallbackTimer = null;
+                function finish() {
+                    if (finished) return;
+                    finished = true;
+                    clearInterval(barTimer);
+                    clearTimeout(fallbackTimer);
+                    try { sessionStorage.setItem('innominate.preloaded', '1'); } catch {}
+                    preloader.classList.add('opacity-0');
+                    setTimeout(() => { preloader.style.display = 'none'; }, 700);
+                }
+                function start() {
+                    const bar = document.getElementById('preloader-bar');
+                    const text = document.getElementById('preloader-text');
+                    let progress = 0;
+                    if (isReduced()) { finish(); return; }
+                    barTimer = setInterval(() => {
+                        progress += 10;
+                        if (bar) bar.style.width = `${Math.min(progress, 100)}%`;
+                        if (progress === 50 && text) text.innerText = 'INITIALIZING innominate SHELL...';
+                        if (progress >= 100) setTimeout(finish, 200);
+                    }, 80);
+                }
+                if (document.readyState === 'complete') start();
+                else window.addEventListener('load', start, { once: true });
+                fallbackTimer = setTimeout(finish, 4000);
+            })();
+
+            (function initMobileMenu() {
+                const btn = document.getElementById('mobile-menu-btn');
+                const menu = document.getElementById('mobile-menu');
+                if (!btn || !menu) return;
+                const close = () => { menu.classList.add('hidden'); btn.setAttribute('aria-expanded', 'false'); };
+                const open = () => { menu.classList.remove('hidden'); btn.setAttribute('aria-expanded', 'true'); };
+                const toggle = () => { menu.classList.contains('hidden') ? open() : close(); };
+                btn.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
+                menu.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+                document.addEventListener('click', (e) => {
+                    if (menu.classList.contains('hidden')) return;
+                    if (!menu.contains(e.target) && !btn.contains(e.target)) close();
+                });
+                document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+            })();
+
+            (function initTypewriter() {
+                const el = document.getElementById('typewriter-text');
+                if (!el) return;
+                const roles = ['Security Researcher', 'OSINT & Digital Forensics', 'Jr. Penetration Tester', 'Web & AI Security', 'Bug Hunter'];
+                let roleIndex = 0, charIndex = 0, deleting = false, timer = null, mounted = false;
+                const stop = () => { if (timer) { clearTimeout(timer); timer = null; } };
+                function tick() {
+                    const role = roles[roleIndex];
+                    el.textContent = deleting ? role.substring(0, charIndex - 1) : role.substring(0, charIndex + 1);
+                    charIndex += deleting ? -1 : 1;
+                    let speed = deleting ? 40 : 80;
+                    if (!deleting && charIndex === role.length) { speed = 2000; deleting = true; }
+                    else if (deleting && charIndex === 0) { deleting = false; roleIndex = (roleIndex + 1) % roles.length; speed = 400; }
+                    timer = setTimeout(tick, speed);
+                }
+                function mount() {
+                    if (mounted) return;
+                    mounted = true;
+                    if (isReduced()) { el.textContent = roles[0]; return; }
+                    timer = setTimeout(tick, 1200);
+                }
+                function reset() {
+                    stop(); mounted = false; roleIndex = 0; charIndex = 0; deleting = false; el.textContent = ''; mount();
+                }
+                if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount, { once: true });
+                else mount();
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) stop();
+                    else if (!isReduced()) { stop(); timer = setTimeout(tick, 800); }
+                });
+                REDUCED_QUERY.addEventListener?.('change', reset);
+            })();
+
+            const COMMANDS = {
+                whoami: 'Khabbab Sarker - #innominate\nSecurity Researcher ¦ Jr. Penetration Tester ¦ Digital Forensic ¦ AI Security',
+                skills: '• Website Security - [ Burp Suite, OWASP ZAP, Nmap, Nuclei, SQLmap ]\n\n• OSINT - [ Google Dorks, Maltego, Shodan, Sherlock, SpiderFoot ]\n\n• Digital Forensic - [ Autopsy, Wireshark, ExifTool, FTK Imager, Magnet AXIOM ]\n\n• Project Management - [ Google Sheets, Google Docs, Microsoft Excel, Microsoft Word, Microsoft PowerPoint ]\n\n• Artificial Intelligence - [ Google AI Studio, Google Gemini, Gemini Canvas, NotebookLM, Nano Banana ]\n\n• Programming - [ Google AI Studio, Visual Studio Code, Git & GitHub ]',
+                certifications: '• Google Cybersecurity Professional Certificate (Coursera)\n• Google AI Professional Certificate (Coursera)\n• Google Project Management Professional Certificate (Coursera)\n• AI Security Learning Path (TryHackMe)\n• Jr Penetration Tester Learning Path (TryHackMe)\n• ISO/IEC 27001:2022 Lead Auditor (Mastermind Assurance)\n• Certified OSINT & Reconnaissance Investigator (Hack & Fix Academy)\n• Digital Forensics Essential (EC-Council)',
+                contact: 'Email: khabbabsarker@gmail.com\nLinkedIn: linkedin.com/in/khabbabsarker\nX: mobile.twitter.com/khabbabsarker\nBio: khabbabsarker.bio.link',
+                status: 'status: Actively practicing Hands-on rooms on TryHackMe.\nExploring new technologies.\nLooking for CTF Teams and cybersecurity Internships to gain practical experience.',
+                help: 'Available commands:\n  whoami         - Display identity and role\n  skills         - View technical skill set\n  certifications - View professional certifications\n  contact        - Display contact links\n  status         - View availability status\n  clear          - Clear terminal history\n  help           - Show this menu'
+            };
+
+            let currentTyping = null;
+            const history_ = [];
+            let historyIdx = -1;
+            const termEls = {
+                history: document.getElementById('terminal-history'),
+                intro: document.getElementById('terminal-intro'),
+                input: document.getElementById('terminal-input'),
+                body: document.getElementById('terminal-body'),
+                announcer: document.getElementById('terminal-announcer')
+            };
+
+            const scrollTerminal = () => { if (termEls.body) termEls.body.scrollTop = termEls.body.scrollHeight; };
+            function announceTerminal(text) {
+                const a = termEls.announcer;
+                if (!a) return;
+                a.textContent = '';
+                setTimeout(() => { a.textContent = text; }, 60);
+            }
+            function flushCurrentTyping() {
+                if (!currentTyping) return;
+                clearTimeout(currentTyping.timer);
+                currentTyping.target.textContent = currentTyping.text;
+                scrollTerminal();
+                announceTerminal(currentTyping.text);
+                currentTyping = null;
+            }
+            function typeOutput(target, text, done) {
+                flushCurrentTyping();
+                if (isReduced()) { target.textContent = text; scrollTerminal(); announceTerminal(text); done?.(); return; }
+                const state = { target, text, i: 0, timer: null };
+                currentTyping = state;
+                (function print() {
+                    if (state.i < text.length) {
+                        target.textContent += text.charAt(state.i++);
+                        if (state.i % 6 === 0) scrollTerminal();
+                        state.timer = setTimeout(print, 8);
+                    } else {
+                        scrollTerminal(); announceTerminal(text); currentTyping = null; done?.();
+                    }
+                })();
+            }
+            function clearTerminal() {
+                flushCurrentTyping();
+                termEls.intro?.remove();
+                if (termEls.history) termEls.history.innerHTML = '';
+                if (termEls.input) { termEls.input.disabled = false; termEls.input.focus(); }
+            }
+            function processCommand(raw) {
+                if (!raw || !termEls.history) return;
+                const cmd = raw.toLowerCase().trim();
+                if (!cmd) return;
+                history_.push(raw);
+                historyIdx = history_.length;
+                if (cmd === 'clear') { clearTerminal(); return; }
+                flushCurrentTyping();
+                const echo = document.createElement('div');
+                echo.className = 'mt-2';
+                echo.innerHTML =
+                    '<div class="text-yellow-400 font-bold">┌──(khabbabsarker㉿Portfolio)-[~]</div>' +
+                    '<div><span class="text-yellow-400 font-bold">└─$ innominate:~#</span> ' + escapeHtml(raw) + '</div>';
+                termEls.history.appendChild(echo);
+                const out = document.createElement('div');
+                out.className = 'text-[#f2a8ff] ml-2 mt-1 whitespace-pre-wrap';
+                termEls.history.appendChild(out);
+                if (Object.prototype.hasOwnProperty.call(COMMANDS, cmd)) {
+                    typeOutput(out, COMMANDS[cmd]);
+                } else {
+                    const err = document.createElement('span');
+                    err.className = 'text-red-400';
+                    out.appendChild(err);
+                    typeOutput(err, `Command not recognized: '${raw}'. Type 'help' for options.`);
+                }
+            }
+
+            (function initTerminal() {
+                const input = termEls.input;
+                if (!input) return;
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') { processCommand(input.value.trim()); input.value = ''; }
+                    else if (e.key === 'ArrowUp') {
+                        if (!history_.length) return;
+                        e.preventDefault();
+                        historyIdx = Math.max(0, historyIdx - 1);
+                        input.value = history_[historyIdx] ?? '';
+                    } else if (e.key === 'ArrowDown') {
+                        if (!history_.length) return;
+                        e.preventDefault();
+                        historyIdx = Math.min(history_.length, historyIdx + 1);
+                        input.value = history_[historyIdx] ?? '';
+                    }
+                });
+            })();
+
+            let toastTimer = null;
+            function showToast(msg) {
+                const toast = document.getElementById('toast');
+                const txt = document.getElementById('toast-message');
+                if (!toast || !txt) return;
+                txt.textContent = msg;
+                toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+                toast.classList.add('translate-y-0', 'opacity-100');
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => {
+                    toast.classList.remove('translate-y-0', 'opacity-100');
+                    toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+                }, 3500);
+            }
+
+            async function copyText(text) {
+                if (navigator.clipboard && window.isSecureContext) {
+                    try { await navigator.clipboard.writeText(text); showToast('Copied: ' + text); return; } catch {}
+                }
+                showToast('Copy manually: ' + text);
+            }
+
+            (function initGrid() {
+                const canvas = document.getElementById('interactive-grid');
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                if (!ctx) return;
+                let GRID = window.innerWidth < 640 ? 45 : 35;
+                const MAX_R = 180;
+                let dpr = Math.min(window.devicePixelRatio || 1, 2);
+                let W = 0, H = 0, ripples = [], rafId = null, lastFrame = 0, needsRedraw = true;
+
+                function resize() {
+                    dpr = Math.min(window.devicePixelRatio || 1, 2);
+                    GRID = window.innerWidth < 640 ? 45 : 35;
+                    W = window.innerWidth; H = window.innerHeight;
+                    canvas.width = Math.floor(W * dpr); canvas.height = Math.floor(H * dpr);
+                    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+                    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                    needsRedraw = true;
+                }
+                function addRipple(x, y) {
+                    if (ripples.length > 8) ripples.shift();
+                    ripples.push({ x, y, r: 5, a: 0.8 });
+                    needsRedraw = true;
+                }
+                window.addEventListener('pointerdown', (e) => {
+                    if (e.button !== 0) return;
+                    if (e.target.closest('a, button, input, textarea, label, [data-action]')) return;
+                    addRipple(e.clientX, e.clientY);
+                }, { passive: true });
+                window.addEventListener('resize', resize, { passive: true });
+
+                function draw(ts) {
+                    rafId = requestAnimationFrame(draw);
+                    if (ts - lastFrame < 33) return;
+                    lastFrame = ts;
+                    for (let i = ripples.length - 1; i >= 0; i--) {
+                        const r = ripples[i];
+                        r.r += 5; r.a -= 0.02;
+                        if (r.a <= 0 || r.r >= MAX_R) { ripples.splice(i, 1); needsRedraw = true; }
+                    }
+                    if (!needsRedraw && ripples.length === 0) return;
+                    needsRedraw = ripples.length > 0;
+                    ctx.clearRect(0, 0, W, H);
+                    const cols = Math.ceil(W / GRID) + 1, rows = Math.ceil(H / GRID) + 1;
+                    for (let cx = 0; cx < cols; cx++) {
+                        for (let cy = 0; cy < rows; cy++) {
+                            const gx = cx * GRID, gy = cy * GRID;
+                            let hAlpha = 0;
+                            for (const rp of ripples) {
+                                const dx = gx + GRID / 2 - rp.x, dy = gy + GRID / 2 - rp.y;
+                                const dist = Math.hypot(dx, dy);
+                                if (dist < rp.r && dist > rp.r - 50) {
+                                    const f = 1 - Math.abs(dist - (rp.r - 25)) / 25;
+                                    if (f > 0) hAlpha += f * rp.a;
+                                }
+                            }
+                            if (hAlpha > 0) {
+                                ctx.fillStyle = `rgba(6, 182, 212, ${Math.min(hAlpha * 0.35, 0.35)})`;
+                                ctx.fillRect(gx, gy, GRID, GRID);
+                                ctx.strokeStyle = `rgba(44, 255, 255, ${Math.min(hAlpha * 0.7, 0.7)})`;
+                            } else {
+                                ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+                            }
+                            ctx.strokeRect(gx, gy, GRID, GRID);
+                        }
+                    }
+                }
+                function start() { if (isReduced()) return; resize(); rafId = requestAnimationFrame(draw); }
+                function stop() { if (rafId) cancelAnimationFrame(rafId); rafId = null; }
+                start();
+                REDUCED_QUERY.addEventListener?.('change', () => {
+                    stop(); ripples = [];
+                    if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    needsRedraw = true;
+                    if (!isReduced()) start();
+                });
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) stop();
+                    else if (!rafId && !isReduced()) start();
+                });
+            })();
+
+            const form = document.getElementById('contact-form');
+            if (form) {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const status = document.getElementById('form-status');
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    const submitLabel = submitBtn.querySelector('span');
+                    const originalLabel = 'Inject Payload';
+                    const name = form.querySelector('#name')?.value.trim();
+                    const email = form.querySelector('#email')?.value.trim();
+                    const message = form.querySelector('#message')?.value.trim();
+                    if (!name || !email || !message) {
+                        showToast('Please fill all fields before transmitting.');
+                        (form.querySelector(':invalid') || form.querySelector('#name'))?.focus();
+                        return;
+                    }
+                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                        showToast('Please enter a valid email address.');
+                        form.querySelector('#email')?.focus();
+                        return;
+                    }
+                    const accessKey = form.querySelector('input[name="access_key"]')?.value;
+                    if (!accessKey || accessKey === 'YOUR_WEB3FORMS_ACCESS_KEY') {
+                        const mailto = `mailto:khabbabsarker@gmail.com?subject=${encodeURIComponent('Portfolio contact from ' + name)}&body=${encodeURIComponent(message + '\n\n— ' + name + ' <' + email + '>')}`;
+                        showToast('Opening mail client… (configure Web3Forms key for direct transmit)');
+                        window.location.href = mailto;
+                        return;
+                    }
+                    submitBtn.disabled = true;
+                    submitLabel.textContent = 'Transmitting…';
+                    try {
+                        const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+                        let data = null;
+                        try { data = await res.json(); } catch {}
+                        if (!res.ok || (data && data.success === false)) throw new Error((data && data.message) || 'Request was rejected.');
+                        status.textContent = '► PAYLOAD INJECTED SUCCESSFULLY.';
+                        status.classList.remove('hidden');
+                        form.reset();
+                        setTimeout(() => status.classList.add('hidden'), 5000);
+                    } catch (err) {
+                        console.error('Contact form error:', err);
+                        showToast('Transmission failed. Email khabbabsarker@gmail.com directly.');
+                    } finally {
+                        submitBtn.disabled = false;
+                        submitLabel.textContent = originalLabel;
+                    }
+                });
+            }
+
+            function printCV() {
+                showToast('Generating printable view…');
+                setTimeout(() => window.print(), 400);
+            }
+
+            document.addEventListener('click', (e) => {
+                const t = e.target.closest('[data-action]');
+                if (!t) return;
+                switch (t.dataset.action) {
+                    case 'clear-terminal': clearTerminal(); break;
+                    case 'print-cv': printCV(); break;
+                    case 'copy-email': if (t.dataset.copy) copyText(t.dataset.copy); break;
+                }
+            });
+
+            (function initFloatingCompanion() {
+                const host = document.getElementById('echo-companion');
+                const inner = document.getElementById('echo-companion-inner');
+                if (!host || !inner) return;
+                const PALETTES = [
+                    { name: 'Purple & Cyan', shell: '#8b5cf6', shellDark: '#4c1d95', shellLight: '#c4b5fd', trim: '#2CFFFF', visor: '#090a12', eye: '#2CFFFF', glow: 'rgba(44, 255, 255, 0.55)', emblem: '#1e1b4b' },
+                    { name: 'Blue & Cyan',   shell: '#38bdf8', shellDark: '#0369a1', shellLight: '#bae6fd', trim: '#6366f1', visor: '#080c14', eye: '#e0f2fe', glow: 'rgba(56, 189, 248, 0.55)', emblem: '#0c4a6e' },
+                    { name: 'Lavender & White', shell: '#e9d5ff', shellDark: '#9333ea', shellLight: '#ffffff', trim: '#a855f7', visor: '#130d1f', eye: '#f5d0fe', glow: 'rgba(216, 180, 254, 0.55)', emblem: '#581c87' },
+                    { name: 'Green & Black', shell: '#10b981', shellDark: '#064e3b', shellLight: '#6ee7b7', trim: '#18181b', visor: '#040806', eye: '#34d399', glow: 'rgba(16, 185, 129, 0.55)', emblem: '#022c22' },
+                    { name: 'Pink & Purple', shell: '#ec4899', shellDark: '#831843', shellLight: '#f9a8d4', trim: '#a855f7', visor: '#120714', eye: '#f472b6', glow: 'rgba(236, 72, 153, 0.55)', emblem: '#4a044e' },
+                    { name: 'Orange & Dark Gray', shell: '#f97316', shellDark: '#7c2d12', shellLight: '#fdba74', trim: '#374151', visor: '#0c0a09', eye: '#fbbf24', glow: 'rgba(249, 115, 22, 0.55)', emblem: '#1f2937' }
+                ];
+                let paletteIdx = 0;
+                function applyPalette(idx) {
+                    const p = PALETTES[idx % PALETTES.length];
+                    host.style.setProperty('--bot-shell', p.shell);
+                    host.style.setProperty('--bot-shell-dark', p.shellDark);
+                    host.style.setProperty('--bot-shell-light', p.shellLight);
+                    host.style.setProperty('--bot-trim', p.trim);
+                    host.style.setProperty('--bot-visor', p.visor);
+                    host.style.setProperty('--bot-eye', p.eye);
+                    host.style.setProperty('--bot-glow', p.glow);
+                    host.style.setProperty('--bot-emblem', p.emblem);
+                }
+                applyPalette(paletteIdx);
+                const getBounds = () => {
+                    const w = host.offsetWidth || 54, h = host.offsetHeight || 66, pad = 16;
+                    return { w, h, minX: pad, maxX: Math.max(pad + 10, window.innerWidth - w - pad), minY: Math.max(pad, 72), maxY: Math.max(pad + 80, window.innerHeight - h - pad) };
+                };
+                const clamp = (val, min, max) => Math.min(Math.max(val, min), max);
+                let bounds = getBounds();
+                let pos = { x: clamp(window.innerWidth * 0.82, bounds.minX, bounds.maxX), y: clamp(window.innerHeight * 0.24, bounds.minY, bounds.maxY) };
+                let vel = { x: 0, y: 0 }, target = { x: pos.x, y: pos.y }, state = 'wander', pauseUntil = 0, wanderSpeed = 1.6, phase = Math.random() * Math.PI * 2, lastTs = performance.now(), rafId = null;
+
+                function pickRandomTarget() {
+                    bounds = getBounds();
+                    let nx, ny, tries = 0;
+                    do {
+                        nx = bounds.minX + Math.random() * (bounds.maxX - bounds.minX);
+                        ny = bounds.minY + Math.random() * (bounds.maxY - bounds.minY);
+                        tries++;
+                    } while (Math.hypot(nx - pos.x, ny - pos.y) < 110 && tries < 6);
+                    target.x = nx; target.y = ny; wanderSpeed = 1.15 + Math.random() * 1.15;
+                }
+                function triggerClass(cls, duration) {
+                    host.classList.remove(cls); void host.offsetWidth; host.classList.add(cls);
+                    setTimeout(() => host.classList.remove(cls), duration);
+                }
+                function flyToInteraction(clientX, clientY) {
+                    bounds = getBounds();
+                    const gapX = 24, gapY = 16;
+                    let targetX = (clientX + gapX + bounds.w <= bounds.maxX) ? clientX + gapX : clientX - gapX - bounds.w;
+                    let targetY = (clientY - gapY - bounds.h >= bounds.minY) ? clientY - gapY - bounds.h : clientY + gapY;
+                    target.x = clamp(targetX, bounds.minX, bounds.maxX);
+                    target.y = clamp(targetY, bounds.minY, bounds.maxY);
+                    state = 'seek';
+                    triggerClass('is-alert', 300);
+                }
+                inner.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    paletteIdx = (paletteIdx + 1) % PALETTES.length;
+                    applyPalette(paletteIdx);
+                    triggerClass('is-excited', 560);
+                });
+                document.addEventListener('click', (e) => {
+                    if (isReduced()) return;
+                    if (e.target.closest('#echo-companion-inner')) return;
+                    if (e.target.closest('a, button, input, textarea, label, select, [data-action], [contenteditable="true"]')) return;
+                    if (typeof e.clientX !== 'number' || typeof e.clientY !== 'number') return;
+                    if (e.clientX === 0 && e.clientY === 0) return;
+                    flyToInteraction(e.clientX, e.clientY);
+                }, { passive: true });
+                window.addEventListener('resize', () => {
+                    bounds = getBounds();
+                    pos.x = clamp(pos.x, bounds.minX, bounds.maxX); pos.y = clamp(pos.y, bounds.minY, bounds.maxY);
+                    target.x = clamp(target.x, bounds.minX, bounds.maxX); target.y = clamp(target.y, bounds.minY, bounds.maxY);
+                }, { passive: true });
+                function renderTransform(tiltDeg) {
+                    host.style.transform = `translate3d(${pos.x.toFixed(2)}px, ${pos.y.toFixed(2)}px, 0) rotate(${tiltDeg.toFixed(2)}deg)`;
+                }
+                function step(now) {
+                    if (isReduced()) { renderTransform(0); rafId = null; return; }
+                    rafId = requestAnimationFrame(step);
+                    const dt = Math.min((now - lastTs) / 16.667, 2.5);
+                    lastTs = now; phase += 0.035 * dt;
+                    if (state === 'pause') {
+                        vel.x *= Math.pow(0.82, dt); vel.y *= Math.pow(0.82, dt);
+                        pos.x += vel.x * dt; pos.y += vel.y * dt;
+                        if (now >= pauseUntil) { state = 'wander'; pickRandomTarget(); }
+                    } else {
+                        const dx = target.x - pos.x, dy = target.y - pos.y, dist = Math.hypot(dx, dy);
+                        if (state === 'seek' && dist < 12) { state = 'pause'; pauseUntil = now + 1350; triggerClass('is-excited', 560); }
+                        else if (state === 'wander' && dist < 24) {
+                            if (Math.random() < 0.28) { state = 'pause'; pauseUntil = now + 700 + Math.random() * 900; }
+                            else pickRandomTarget();
+                        } else {
+                            const maxSpeed = state === 'seek' ? 7.2 : wanderSpeed;
+                            const steerEase = state === 'seek' ? 0.14 : 0.045;
+                            const desiredSpeed = dist < 90 ? maxSpeed * Math.max(0.22, dist / 90) : maxSpeed;
+                            const invDist = dist > 0.001 ? 1 / dist : 0;
+                            const driftX = state === 'wander' ? Math.cos(phase * 0.9) * 0.35 : 0;
+                            const driftY = state === 'wander' ? Math.sin(phase * 1.2) * 0.35 : 0;
+                            const desiredVx = dx * invDist * desiredSpeed + driftX;
+                            const desiredVy = dy * invDist * desiredSpeed + driftY;
+                            vel.x += (desiredVx - vel.x) * (1 - Math.pow(1 - steerEase, dt));
+                            vel.y += (desiredVy - vel.y) * (1 - Math.pow(1 - steerEase, dt));
+                            pos.x += vel.x * dt; pos.y += vel.y * dt;
+                        }
+                    }
+                    pos.x = clamp(pos.x, bounds.minX, bounds.maxX); pos.y = clamp(pos.y, bounds.minY, bounds.maxY);
+                    renderTransform(clamp(vel.x * 2.6, -16, 16));
+                }
+                pickRandomTarget(); renderTransform(0);
+                if (!isReduced()) rafId = requestAnimationFrame(step);
+                REDUCED_QUERY.addEventListener?.('change', () => {
+                    if (isReduced()) { if (rafId) { cancelAnimationFrame(rafId); rafId = null; } renderTransform(0); }
+                    else if (!rafId) { lastTs = performance.now(); rafId = requestAnimationFrame(step); }
+                });
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) { if (rafId) cancelAnimationFrame(rafId); rafId = null; }
+                    else if (!rafId && !isReduced()) { lastTs = performance.now(); rafId = requestAnimationFrame(step); }
+                });
+            })();
+
+            /* ================= COMPANION MINI TERMINAL & LIGHT MODE ================= */
+            (function initCompanionFeatures() {
+                const miniBox = document.getElementById('echo-mini-terminal');
+                const miniText = document.getElementById('echo-mini-text');
+                const miniClose = document.getElementById('echo-mini-close');
+                const miniSound = document.getElementById('echo-mini-sound');
+                const MINI_MESSAGE_PREFIX = '\n';
+                const botHost = document.getElementById('echo-companion');
+                const themeBtn = document.getElementById('theme-toggle-btn');
+                const themeIcon = document.getElementById('theme-toggle-icon');
+                const themeLabel = document.getElementById('theme-toggle-label');
+                const metaTheme = document.querySelector('meta[name="theme-color"]');
+
+                const STORAGE = {
+                    theme: 'innominate.theme',
+                    hackDone: 'innominate.hack_sim_done',
+                    darkCounter: 'innominate.darkweb_count',
+                    whiteCounter: 'innominate.whitehat_count',
+                    sectionPrefix: 'innominate.sec_seen.',
+                    typingSound: 'innominate.mini_terminal_typing_sound'
+                };
+
+                function getStorage(key) {
+                    try { return localStorage.getItem(key); } catch { return null; }
+                }
+                function setStorage(key, val) {
+                    try { localStorage.setItem(key, val); } catch {}
+                }
+
+                // --- REAL keyboard typing recording (enabled by default; user can turn it off) ---
+                // A prerecorded keyboard-typing take is played only while message characters are being rendered.
+                // The track is looped only for the duration of an active typing sequence.
+                const TYPING_SOUND_URL = 'https://cdn.jsdelivr.net/gh/L1337Xi/DevilCorp@main/dragon-studio-keyboard-typing-sound-effect-335503.mp3';
+                const savedTypingSoundPreference = getStorage(STORAGE.typingSound);
+                let typingSoundEnabled = savedTypingSoundPreference === null ? true : savedTypingSoundPreference === '1';
+                let typingInProgress = false;
+                let typingAudioStarted = false;
+                const typingAudio = new Audio();
+                typingAudio.preload = 'auto';
+                typingAudio.crossOrigin = 'anonymous';
+                typingAudio.src = TYPING_SOUND_URL;
+                typingAudio.loop = true;
+                typingAudio.volume = 0.28;
+                typingAudio.playbackRate = 1;
+                typingAudio.playsInline = true;
+
+                function syncTypingSoundButton() {
+                    if (!miniSound) return;
+                    miniSound.textContent = typingSoundEnabled ? 'SOUND ON' : 'SOUND OFF';
+                    miniSound.setAttribute('aria-pressed', typingSoundEnabled ? 'true' : 'false');
+                    miniSound.setAttribute('aria-label', typingSoundEnabled ? 'Disable typing sounds' : 'Enable typing sounds');
+                    miniSound.title = 'Typing sound: ' + (typingSoundEnabled ? 'On' : 'Off');
+                }
+
+                function startTypingSound() {
+                    if (!typingSoundEnabled || !typingInProgress || document.hidden || !miniBox?.classList.contains('is-visible')) return;
+
+                    // A previous first-page interaction may have started the track silently.
+                    // Unmuting an already-playing media element avoids a second autoplay attempt.
+                    if (!typingAudio.paused) {
+                        typingAudio.muted = false;
+                        typingAudioStarted = true;
+                        return;
+                    }
+                    if (typingAudioStarted) return;
+
+                    typingAudio.muted = false;
+                    typingAudioStarted = true;
+                    try {
+                        const playback = typingAudio.play();
+                        if (playback && typeof playback.then === 'function') {
+                            playback.then(() => {
+                                typingAudio.muted = false;
+                            }).catch(() => {
+                                typingAudioStarted = false;
+                            });
+                        }
+                    } catch {
+                        typingAudioStarted = false;
+                    }
+                }
+
+                function stopTypingSound() {
+                    typingAudioStarted = false;
+                    typingAudio.pause();
+                    typingAudio.muted = true;
+                    try { typingAudio.currentTime = 0; } catch {}
+                }
+
+                // Prime audio on the visitor's first genuine page interaction.
+                // Keep it playing silently while idle; the typing renderer unmutes it
+                // when the next message starts. This avoids requiring a click on the robot.
+                function unlockTypingAudioFromGesture() {
+                    if (!typingSoundEnabled) return;
+
+                    if (!typingAudio.paused) {
+                        if (typingInProgress && miniBox?.classList.contains('is-visible')) {
+                            typingAudio.muted = false;
+                            typingAudioStarted = true;
+                        }
+                        return;
+                    }
+
+                    typingAudio.muted = !typingInProgress;
+                    try {
+                        const unlockAttempt = typingAudio.play();
+                        if (unlockAttempt && typeof unlockAttempt.then === 'function') {
+                            unlockAttempt.then(() => {
+                                    if (typingInProgress && miniBox?.classList.contains('is-visible')) {
+                                    typingAudio.muted = false;
+                                    typingAudioStarted = true;
+                                } else {
+                                    // Remain silently primed until the next typing sequence.
+                                    typingAudio.muted = true;
+                                }
+                            }).catch(() => {
+                                typingAudioStarted = false;
+                                typingAudio.muted = true;
+                            });
+                        } else {
+                            typingAudioUnlocked = true;
+                            if (!typingInProgress) typingAudio.muted = true;
+                        }
+                    } catch {
+                        typingAudioStarted = false;
+                        typingAudio.muted = true;
+                    }
+                }
+
+                typingAudio.addEventListener('ended', () => {
+                    typingAudioStarted = false;
+                    if (typingInProgress) startTypingSound();
+                });
+                typingAudio.addEventListener('canplay', () => {
+                    if (typingInProgress) startTypingSound();
+                });
+                typingAudio.addEventListener('error', () => {
+                    typingAudioStarted = false;
+                    // Audio failure must never interrupt or slow down the terminal animation.
+                });
+
+                // Capture the first interaction anywhere on the page, before target handlers run.
+                ['pointerdown', 'touchstart', 'keydown'].forEach((eventName) => {
+                    document.addEventListener(eventName, unlockTypingAudioFromGesture, {
+                        capture: true,
+                        passive: true
+                    });
+                });
+
+                syncTypingSoundButton();
+                if (typingSoundEnabled) {
+                    // Begin buffering and attempt autoplay for browsers that permit it.
+                    typingAudio.load();
+                }
+                if (miniSound) {
+                    miniSound.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        typingSoundEnabled = !typingSoundEnabled;
+                        setStorage(STORAGE.typingSound, typingSoundEnabled ? '1' : '0');
+                        syncTypingSoundButton();
+                        if (!typingSoundEnabled) {
+                            stopTypingSound();
+                        } else {
+                            // The SOUND ON click is also a valid audio-unlock gesture.
+                            unlockTypingAudioFromGesture();
+                            if (typingInProgress) startTypingSound();
+                        }
+                    });
+                }
+
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) stopTypingSound();
+                    else if (typingSoundEnabled && typingInProgress) startTypingSound();
+                });
+
+                // --- Mini Terminal Queue & Positioning ---
+                const queue = [];
+                let activeItem = null;
+                let typeTimer = null;
+                let closeTimer = null;
+                let followRaf = null;
+
+                function positionMiniTerminal() {
+                    if (!miniBox || !botHost || !activeItem) return;
+                    const botRect = botHost.getBoundingClientRect();
+                    const boxRect = miniBox.getBoundingClientRect();
+                    const pad = 8;
+                    const gap = 8;
+
+                    let left = botRect.left + (botRect.width / 2) - (boxRect.width / 2);
+                    left = Math.min(Math.max(left, pad), Math.max(pad, window.innerWidth - boxRect.width - pad));
+
+                    let top = botRect.top - boxRect.height - gap;
+                    if (top < pad) {
+                        top = Math.min(botRect.bottom + gap, window.innerHeight - boxRect.height - pad);
+                    }
+
+                    miniBox.style.transform = `translate3d(${left.toFixed(1)}px, ${top.toFixed(1)}px, 0)`;
+                    followRaf = requestAnimationFrame(positionMiniTerminal);
+                }
+
+                function startFollow() {
+                    if (!followRaf) {
+                        followRaf = requestAnimationFrame(positionMiniTerminal);
+                    }
+                }
+
+                function stopFollow() {
+                    if (followRaf) {
+                        cancelAnimationFrame(followRaf);
+                        followRaf = null;
+                    }
+                }
+
+                function hideMiniTerminal(wasManual) {
+                    typingInProgress = false;
+                    stopTypingSound();
+                    clearTimeout(typeTimer);
+                    clearTimeout(closeTimer);
+                    typeTimer = null;
+                    closeTimer = null;
+
+                    if (wasManual && activeItem && typeof activeItem.onManualClose === 'function') {
+                        activeItem.onManualClose();
+                    }
+
+                    activeItem = null;
+                    if (miniBox) {
+                        miniBox.classList.remove('is-visible');
+                        miniBox.setAttribute('aria-hidden', 'true');
+                    }
+                    stopFollow();
+
+                    if (queue.length > 0) {
+                        setTimeout(processNext, 260);
+                    }
+                }
+
+                function processNext() {
+                    if (activeItem || queue.length === 0 || !miniBox || !miniText) return;
+                    activeItem = queue.shift();
+                    typingInProgress = true;
+                    miniText.textContent = '';
+                    miniBox.classList.add('is-visible');
+                    miniBox.setAttribute('aria-hidden', 'false');
+                    startFollow();
+
+                    const fullText = MINI_MESSAGE_PREFIX + activeItem.text;
+                    if (isReduced()) {
+                        typingInProgress = false;
+                        stopTypingSound();
+                        miniText.textContent = fullText;
+                        if (typeof activeItem.onComplete === 'function') activeItem.onComplete();
+                        closeTimer = setTimeout(() => hideMiniTerminal(false), 5000);
+                        return;
+                    }
+
+                    let idx = 0;
+                    startTypingSound();
+                    function typeStep() {
+                        if (!activeItem) return;
+                        if (idx < fullText.length) {
+                            const char = fullText.charAt(idx);
+                            miniText.textContent += char;
+                            idx++;
+                            typeTimer = setTimeout(typeStep, 24);
+                        } else {
+                            typeTimer = null;
+                            typingInProgress = false;
+                            stopTypingSound();
+                            if (typeof activeItem.onComplete === 'function') activeItem.onComplete();
+                            closeTimer = setTimeout(() => hideMiniTerminal(false), 5000);
+                        }
+                    }
+                    typeStep();
+                }
+
+                function enqueueMessage(item) {
+                    if (item.dedupeKey) {
+                        if (activeItem && activeItem.dedupeKey === item.dedupeKey) return;
+                        if (queue.some(q => q.dedupeKey === item.dedupeKey)) return;
+                    }
+                    queue.push(item);
+                    if (!activeItem) processNext();
+                }
+
+                if (miniClose) {
+                    miniClose.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        hideMiniTerminal(true);
+                    });
+                }
+
+                // --- 1. Live Hacking Simulation (10s delay, replays on every page load) ---
+                function generateFakeScanData() {
+                    const commonPorts = [22, 80, 443, 8080, 8443, 3306, 5432, 2222, 9001, 4444];
+                    const port = Math.random() < 0.65
+                        ? commonPorts[Math.floor(Math.random() * commonPorts.length)]
+                        : (1024 + Math.floor(Math.random() * 64000));
+
+                    // Strictly RFC 5737 documentation IP blocks
+                    const prefixes = ['192.0.2.', '198.51.100.', '203.0.113.'];
+                    const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+                    const hostOctet = 1 + Math.floor(Math.random() * 254);
+                    const fakeIp = prefix + hostOctet;
+
+                    const fictionalIsps = [
+                        'Padma FiberNet BD',
+                        'Meghna Cloud Telecom',
+                        'Sundarbans NetLink',
+                        'Jamuna Backbone ISP',
+                        'Bengal CyberWave Ltd.'
+                    ];
+                    const isp = fictionalIsps[Math.floor(Math.random() * fictionalIsps.length)];
+
+                    return { port, fakeIp, isp };
+                }
+
+                setTimeout(() => {
+                    const { port, fakeIp, isp } = generateFakeScanData();
+                    const msg =
+                        `> nmap -sV innominate.com\n` +
+                        `> Port - ${port}\n` +
+                        `> Access Granted\n` +
+                        `> Your IP: — ${fakeIp}\n` +
+                        `> Location: Bangladesh — ISP: ${isp}\n` +
+                        `> Don't worry, I didn't store it.`;
+
+                    enqueueMessage({
+                        dedupeKey: 'live-hack-sim',
+                        text: msg
+                    });
+                }, 10000);
+
+                // --- 2. Section-Aware Companion Messages (once per browser tab session) ---
+                const SECTIONS = [
+                    {
+                        id: 'whoami',
+                        text: "> Hey, curious visitor!\n> Scanning identity database...\n> Subject: Khabbab Sarker\n> Designation: Security Researcher\n> Interests: OSINT | Pentesting | Digital Forensics\n> Welcome to the innominate's digital space."
+                    },
+                    {
+                        id: 'terminal-container',
+                        text: "> Oh, you found the terminal!\n> Initializing command interface...\n> Connection: Secure\n> Available commands: HELP | ABOUT | SKILLS\n> Don't just watch. Try something!"
+                    },
+                    {
+                        id: 'skills',
+                        text: "> Let's inspect the security toolkit!\n> Loading technical capabilities...\n> Network Analysis: Available\n> Web Security: Available\n> OSINT & Digital Forensics: Available\n> Arsenal loaded. What's your next move?"
+                    },
+                    {
+                        id: 'experience',
+                        text: "> Accessing professional records...\n> Security Research: In Progress\n> Bug Bounty Platforms: HackerOne | Bugcrowd\n> Focus: Asset Reconnaissance & VAPT\n> Every vulnerability has a story..."
+                    },
+                    {
+                        id: 'certifications',
+                        text: "> Searching knowledge database...\n> Google Cybersecurity: Verified\n> Google AI Professional: Verified\n> Credentials loaded successfully.\n> But remember, learning never ends!"
+                    },
+                    {
+                        id: 'contact',
+                        text: "> Hey! Before you leave...\n> Looking for a security enthusiast?\n> Need to discuss a project or collaboration?\n> Secure communication channel: OPEN\n> Let's establish a connection!"
+                    }
+                ];
+
+                const shownSectionsThisLoad = new Set();
+                function hasSeenSection(secId) {
+                    try { return sessionStorage.getItem(STORAGE.sectionPrefix + secId) === '1'; }
+                    catch { return shownSectionsThisLoad.has(secId); }
+                }
+                function markSectionSeen(secId) {
+                    shownSectionsThisLoad.add(secId);
+                    try { sessionStorage.setItem(STORAGE.sectionPrefix + secId, '1'); } catch {}
+                }
+                function triggerSectionMessage(sec) {
+                    if (shownSectionsThisLoad.has(sec.id) || hasSeenSection(sec.id)) return;
+                    // Mark immediately so repeated observer callbacks cannot enqueue duplicates.
+                    markSectionSeen(sec.id);
+                    enqueueMessage({
+                        dedupeKey: 'section-' + sec.id,
+                        text: sec.text
+                    });
+                }
+
+                if ('IntersectionObserver' in window) {
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach((entry) => {
+                            if (!entry.isIntersecting) return;
+                            const sec = SECTIONS.find(s => s.id === entry.target.id);
+                            if (sec) triggerSectionMessage(sec);
+                        });
+                    }, { threshold: 0.35 });
+
+                    SECTIONS.forEach((sec) => {
+                        const el = document.getElementById(sec.id);
+                        if (el) observer.observe(el);
+                    });
+                }
+
+                // --- 3. Light Mode & Dark Web Mode Activation ---
+                function syncThemeUI(isDark) {
+                    if (themeIcon) {
+                        themeIcon.className = isDark
+                            ? 'fa-solid fa-sun text-xs'
+                            : 'fa-solid fa-moon text-xs';
+                    }
+                    if (themeLabel) {
+                        themeLabel.textContent = isDark ? 'LIGHT' : 'DARK';
+                    }
+                    if (themeBtn) {
+                        themeBtn.setAttribute('aria-label', isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+                    }
+                    if (metaTheme) {
+                        metaTheme.setAttribute('content', isDark ? '#050507' : '#f4f7fb');
+                    }
+                }
+
+                // Sync toggle UI on initial load without triggering Dark Web Mode message
+                syncThemeUI(document.documentElement.classList.contains('dark'));
+
+                if (themeBtn) {
+                    themeBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const html = document.documentElement;
+                        const wasDark = html.classList.contains('dark');
+                        const nowDark = !wasDark;
+
+                        if (nowDark) {
+                            html.classList.add('dark');
+                            setStorage(STORAGE.theme, 'dark');
+                        } else {
+                            html.classList.remove('dark');
+                            setStorage(STORAGE.theme, 'light');
+                        }
+
+                        syncThemeUI(nowDark);
+
+                        // Trigger the matching activation message only after a manual theme change.
+                        if (!wasDark && nowDark) {
+                            const prevCount = parseInt(getStorage(STORAGE.darkCounter) || '0', 10) || 0;
+                            const nextCount = prevCount + 1;
+                            setStorage(STORAGE.darkCounter, String(nextCount));
+                            // Keep the activation counter, but enqueue exactly one message per manual switch.
+                            enqueueMessage({ text: '> Dark Web Mode Activated' });
+                        } else if (wasDark && !nowDark) {
+                            const prevCount = parseInt(getStorage(STORAGE.whiteCounter) || '0', 10) || 0;
+                            const nextCount = prevCount + 1;
+                            setStorage(STORAGE.whiteCounter, String(nextCount));
+                            // Keep the activation counter, but enqueue exactly one message per manual switch.
+                            enqueueMessage({ text: '> White Hat Mode Activated' });
+                        }
+                    });
+                }
+            })();
+        })();
+    </script>
+</body>
+</html>
